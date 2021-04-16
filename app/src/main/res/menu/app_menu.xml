@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/profile_menu"
+        android:title="Profile"
+       />
+
+    <item android:id="@+id/map_menu"
+        android:title="My Location"
+       />
+
+    <item android:id="@+id/missing_person_menu"
+        android:title="Missing Person"
+        >
+        <menu>
+            <item android:id="@+id/add_person_sub_menu"
+                android:title="Add"
+                />
+
+            <item android:id="@+id/view_list_sub_menu"
+                android:title="View List"
+                />
+        </menu>
+    </item>
+</menu>
