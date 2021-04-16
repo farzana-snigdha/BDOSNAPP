@@ -3,24 +3,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/profile_menu"
         android:title="Profile"
-       />
+        app:showAsAction="never"
+        />
 
     <item android:id="@+id/map_menu"
         android:title="My Location"
-
-        />
+        app:showAsAction="never"/>
 
     <item android:id="@+id/missing_person_menu"
         android:title="Missing Person"
-        >
+        app:showAsAction="never">
         <menu>
             <item android:id="@+id/add_person_sub_menu"
                 android:title="Add"
-                />
+                app:showAsAction="never"/>
 
             <item android:id="@+id/view_list_sub_menu"
                 android:title="View List"
-                />
+                app:showAsAction="never"/>
         </menu>
     </item>
 </menu>
