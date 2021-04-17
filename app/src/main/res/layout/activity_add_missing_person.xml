@@ -1,19 +1,256 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-<!--    <de.hdodenhof.circleimageview.CircleImageView-->
-<!--        android:id="@+id/visit_profile_image"-->
-<!--        android:layout_width="200dp"-->
-<!--        android:layout_height="200dp"-->
-<!--        android:layout_alignParentTop="true"-->
-<!--        android:layout_centerHorizontal="true"-->
-<!--        android:layout_marginTop="130dp"-->
-<!--        />-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relativeLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="12dp"
+    android:paddingTop="12dp"
+    android:paddingRight="12dp">
+
+
+    <ImageView
+        android:id="@+id/missing_photo"
+        android:layout_width="150dp"
+        android:layout_height="178dp"
+        tools:src="@drawable/profile_icon" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/missing_location_label"
+        android:layout_width="177dp"
+        android:layout_height="30dp"
+        android:layout_below="@id/missing_name_text"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="7dp"
+        android:layout_toEndOf="@id/missing_photo"
+        android:background="@color/headbar"
+        android:text="Location"
+        android:textAlignment="center"
+        android:textSize="20dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/missing_name_label"
+        android:layout_width="177dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="7dp"
+        android:layout_toEndOf="@id/missing_photo"
+        android:background="@color/headbar"
+        android:text="Name"
+        android:textAlignment="center"
+        android:textSize="20dp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/missing_name_text"
+        android:layout_width="wrap_content"
+        android:layout_height="42dp"
+        android:layout_below="@id/missing_name_label"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="6dp"
+        android:layout_toEndOf="@id/missing_photo"
+        android:hint="Name                       "
+        android:textSize="20dp" />
+
+    <EditText
+        android:id="@+id/missing_location_text"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:layout_below="@id/missing_location_label"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_toEndOf="@id/missing_photo"
+        android:hint="Location                  "
+        android:textSize="20dp"
+       />
+    <TextView
+        android:id="@+id/description_label"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_below="@id/missing_photo"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="15dp"
+        android:background="@color/headbar"
+        android:text="Description"
+        android:textAlignment="center"
+        android:textSize="25dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/age_label"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/description_label"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:text="Age :"
+        android:textSize="15dp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/age_text"
+        android:layout_width="70dp"
+        android:layout_height="35dp"
+        android:layout_below="@id/description_label"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_toEndOf="@id/age_label"
+        android:hint="Age"
+        android:textSize="12dp"
+        />
+
+    <TextView
+        android:id="@+id/height_label"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/description_label"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:text="Height :"
+        android:textAlignment="center"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        android:layout_toEndOf="@id/age_text"/>
+
+    <EditText
+        android:id="@+id/height_text"
+        android:layout_width="85dp"
+        android:layout_height="35dp"
+        android:layout_below="@id/description_label"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_toRightOf="@id/height_label"
+        android:hint="Height"
+        android:textSize="12dp"
+        />
+
+    <TextView
+        android:id="@+id/gender_label"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/age_label"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="5dp"
+        android:text="Gender :"
+        android:textSize="15dp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/gender_text"
+        android:layout_width="70dp"
+        android:layout_height="35dp"
+        android:layout_below="@id/age_text"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_toRightOf="@id/gender_label"
+        android:hint="Gender"
+        android:textSize="12dp"
+        />
+
+    <TextView
+        android:id="@+id/relation_label"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/height_label"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp"
+        android:text="Relation:"
+        android:textAlignment="center"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        android:layout_toRightOf="@id/age_text"/>
+
+    <EditText
+        android:id="@+id/relation_text"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_below="@id/height_text"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_toRightOf="@id/height_label"
+        android:hint="Relation"
+        android:textSize="12dp"
+        />
+
+    <TextView
+        android:id="@+id/last_seen_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:layout_below="@id/gender_label"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="5dp"
+        android:text="Last Seen :"
+        android:textAlignment="center"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        />
+
+    <EditText
+        android:id="@+id/last_seen_text"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_below="@id/gender_text"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_toRightOf="@id/last_seen_label"
+        android:hint="Last Seen"
+        android:textSize="12dp"
+        />
+
+    <TextView
+        android:id="@+id/general_desc_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/last_seen_label"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:text="General Description :"
+        android:textAlignment="center"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        />
+
+    <EditText
+        android:id="@+id/general_desc_text"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_below="@id/general_desc_label"
+        android:layout_marginBottom="5dp"
+        android:hint="General Description"
+        android:textAlignment="textStart"
+        android:textSize="12dp"
+        />
+
+    <TextView
+        android:id="@+id/contact_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/general_desc_text"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="5dp"
+        android:text="Contact Info :"
+        android:textAlignment="center"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        />
+
+    <EditText
+        android:id="@+id/contact_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/general_desc_text"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="10dp"
+        android:layout_toRightOf="@id/contact_label"
+        android:hint="Contact Number"
+        android:textSize="12dp"
+        />
 </RelativeLayout>
