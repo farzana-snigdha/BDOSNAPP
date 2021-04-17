@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "883541588459",
+    "firebase_url": "https://bdosn-app-rescue-default-rtdb.firebaseio.com",
+    "project_id": "bdosn-app-rescue",
+    "storage_bucket": "bdosn-app-rescue.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:883541588459:android:7465f08d376cf6c94d41ae",
+        "android_client_info": {
+          "package_name": "com.example.bdosn_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "883541588459-c6vifq88eue3ehje2mf146e0u7hec637.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCnEFWuaGCl6_17V0ezFB7w4zIQqjGNkgk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "883541588459-c6vifq88eue3ehje2mf146e0u7hec637.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
