@@ -3,6 +3,9 @@ package com.example.bdosn_app;
 public class MissingPerson {
     String age,contact,desc,gender,height,image,last_seen,location,name,relation;
 
+    public MissingPerson() {
+    }
+
     public MissingPerson(String age, String contact, String desc, String gender, String height, String image, String last_seen, String location, String name, String relation) {
         this.age = age;
         this.contact = contact;

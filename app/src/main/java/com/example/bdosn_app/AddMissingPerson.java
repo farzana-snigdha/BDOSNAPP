@@ -6,6 +6,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -45,6 +49,16 @@ public class AddMissingPerson extends AppCompatActivity {
         missingPhoto = findViewById(R.id.missing_photo);
         confirm = findViewById(R.id.confirm_button);
 
+        name =(EditText) findViewById(R.id.missing_name_text);
+        location =(EditText) findViewById(R.id.missing_location_text);
+        age =(EditText) findViewById(R.id.age_text);
+        height = (EditText)findViewById(R.id.height_text);
+        gender =(EditText) findViewById(R.id.gender_text);
+        relation =(EditText) findViewById(R.id.relation_text);
+        description =(EditText) findViewById(R.id.general_desc_text);
+        contact =(EditText) findViewById(R.id.contact_text);
+        lastSeen =(EditText) findViewById(R.id.last_seen_text);
+
         missingPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -58,6 +72,38 @@ public class AddMissingPerson extends AppCompatActivity {
                 uploadInformation();
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater=getMenuInflater();
+        inflater.inflate(R.menu.app_menu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.profile_menu:
+                // startActivity();
+                Toast.makeText(this,"profile",Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.map_menu:
+                // startActivity();
+                Toast.makeText(this,"current location",Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.add_person_sub_menu:
+                Intent intent1 = new Intent(this, AddMissingPerson.class);
+                this.startActivity(intent1);
+                return true;
+            case R.id.view_list_sub_menu:
+                Intent intent2 = new Intent(this, ViewMissingPersonList.class);
+                this.startActivity(intent2);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
     }
 
     private void choosePicture() {
@@ -79,22 +125,10 @@ public class AddMissingPerson extends AppCompatActivity {
             } catch (Exception e) {
 
             }
-            //  uploadPicture();
         }
     }
 
     private void uploadInformation() {
-
-        name =(EditText) findViewById(R.id.missing_name_text);
-        location =(EditText) findViewById(R.id.missing_location_text);
-        age =(EditText) findViewById(R.id.age_text);
-        height = (EditText)findViewById(R.id.height_text);
-        gender =(EditText) findViewById(R.id.gender_text);
-        relation =(EditText) findViewById(R.id.relation_text);
-        description =(EditText) findViewById(R.id.general_desc_text);
-        contact =(EditText) findViewById(R.id.contact_text);
-        lastSeen =(EditText) findViewById(R.id.last_seen_text);
-
 
         final String randomKey = UUID.randomUUID().toString();
         storage=FirebaseStorage.getInstance();
@@ -103,7 +137,8 @@ public class AddMissingPerson extends AppCompatActivity {
         final ProgressDialog pd = new ProgressDialog(this);
         pd.setTitle("Uploading Information...");
         pd.show();
-
+        FirebaseDatabase db=FirebaseDatabase.getInstance();
+        DatabaseReference root=db.getReference("MissingPersons");
         riversRef.putFile(imageUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -111,12 +146,16 @@ public class AddMissingPerson extends AppCompatActivity {
                         riversRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                             @Override
                             public void onSuccess(Uri uri) {
+                                String fAge,fContact,fDesc,fLoc,fGender,fHeight,fLastSeen,fName,fRelation,fImg;
+
                                 pd.dismiss();
 
-                                FirebaseDatabase db=FirebaseDatabase.getInstance();
-                                DatabaseReference root=db.getReference("MissingPersons");
-
-                                MissingPerson missingPerson=new MissingPerson(age.getText().toString(),contact.getText().toString(),
+//                                if(TextUtils.isEmpty(uri.toString())){
+//                                    fImg="#";
+//                                }else {
+//                                    fImg=uri.toString();
+//                                }
+                                MissingPerson missingPerson=new MissingPerson(age.getText().toString().trim(),contact.getText().toString(),
                                         description.getText().toString(),gender.getText().toString(),height.getText().toString(),
                                         uri.toString(),lastSeen.getText().toString(),location.getText().toString(),name.getText().toString(),
                                         relation.getText().toString());
@@ -132,7 +171,7 @@ public class AddMissingPerson extends AppCompatActivity {
                                 description.setText("");
                                 contact.setText("");
                                 missingPhoto.setImageResource(R.drawable.profile_icon);
-                                Toast.makeText(getApplicationContext(), "Uploaded Successfully", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(AddMissingPerson.this, "Uploaded Successfully", Toast.LENGTH_SHORT).show();
 
                             }
                         });
