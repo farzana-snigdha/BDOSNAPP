@@ -58,6 +58,8 @@ public class AddMissingPerson extends AppCompatActivity {
         description =(EditText) findViewById(R.id.general_desc_text);
         contact =(EditText) findViewById(R.id.contact_text);
         lastSeen =(EditText) findViewById(R.id.last_seen_text);
+        missingPhoto.setImageResource(R.drawable.profile_icon);
+
 
         missingPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,7 +161,7 @@ public class AddMissingPerson extends AppCompatActivity {
                                         description.getText().toString(),gender.getText().toString(),height.getText().toString(),
                                         uri.toString(),lastSeen.getText().toString(),location.getText().toString(),name.getText().toString(),
                                         relation.getText().toString());
-                                root.child(contact.getText().toString()).setValue(missingPerson);
+                                root.child(contact.getText().toString()+new Random().nextInt(1200)).setValue(missingPerson);
 
                                 name.setText("");
                                 age.setText("");

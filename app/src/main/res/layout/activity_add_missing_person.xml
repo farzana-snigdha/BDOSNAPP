@@ -16,7 +16,7 @@
         android:id="@+id/missing_photo"
         android:layout_width="150dp"
         android:layout_height="178dp"
-        tools:src="@drawable/profile_icon" />
+        />
 
     <TextView
         android:id="@+id/missing_location_label"
