@@ -2,166 +2,41 @@ package com.example.bdosn_app;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.firebase.ui.database.FirebaseListAdapter;
-import com.firebase.ui.database.FirebaseListOptions;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
 
 public class ViewMissingPersonList extends AppCompatActivity {
-    ListView listView;
-    FirebaseListAdapter adapter;
-    AutoCompleteTextView search;
-    DatabaseReference ref;
+    RecyclerView recview;
+    MyAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_missing_person_list);
-        listView = findViewById(R.id.missing_list);
-        search = findViewById(R.id.missing_person_search);
 
-        ref = FirebaseDatabase.getInstance().getReference("MissingPersons");
+        recview=(RecyclerView)findViewById(R.id.recview);
+        recview.setLayoutManager(new LinearLayoutManager(this));
 
-        ValueEventListener event = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                populateSearch(snapshot);
-            }
+        FirebaseRecyclerOptions<MissingPerson> options =
+                new FirebaseRecyclerOptions.Builder<MissingPerson>()
+                        .setQuery(FirebaseDatabase.getInstance().getReference().child("MissingPersons"), MissingPerson.class)
+                        .build();
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        };
-        ref.addListenerForSingleValueEvent(event);
-
-        Query query = FirebaseDatabase.getInstance().getReference().child("MissingPersons");
-
-        populateListView(query);
-//        listView.setOnItemClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//            }
-//        });
+        adapter=new MyAdapter(options);
+        recview.setAdapter(adapter);
     }
 
-    private void populateListView(Query query) {
-        FirebaseListOptions<MissingPerson> options = new FirebaseListOptions.Builder<MissingPerson>()
-                .setLayout(R.layout.row_item)
-                .setQuery(query, MissingPerson.class)
-                .build();
-        adapter = new FirebaseListAdapter(options) {
-            @Override
-            protected void populateView(View v, Object model, int position) {
-                TextView name = v.findViewById(R.id.textViewMissingName);
-                TextView location = v.findViewById(R.id.textViewMissingLocation);
-                TextView contact = v.findViewById(R.id.textViewMissingContact);
-                ImageView img = v.findViewById(R.id.imageViewMissingPerson);
-
-                MissingPerson missingPerson = (MissingPerson) model;
-                name.setText("Name: " + missingPerson.getName());
-                location.setText("Location: " + missingPerson.getLocation());
-                contact.setText("Contact: " + missingPerson.getContact());
-                Picasso.get().load(missingPerson.getImage().toString()).into(img);
-
-
-            }
-        };
-        listView.setAdapter(adapter);
-    }
-
-    private void populateSearch(DataSnapshot snapshot) {
-        ArrayList<String> searchResult = new ArrayList<>();
-        if (snapshot.exists()) {
-            for (DataSnapshot ds : snapshot.getChildren()) {
-                String name = ds.child("name").getValue(String.class);
-                String loc = ds.child("location").getValue(String.class);
-                searchResult.add(name);
-                searchResult.add(loc);
-            }
-            ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, searchResult);
-            search.setAdapter(adapter);
-            search.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    String res = search.getText().toString();
-                    getSearchedResult(res);
-                }
-            });
-        } else {
-            Log.d("missing person", "no data found");
-        }
-    }
-
-    private void getSearchedResult(String res) {
-        Query query = ref.orderByChild("name").equalTo(res);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    ArrayList<String> arrayList = new ArrayList<>();
-                    for (DataSnapshot ds : snapshot.getChildren()) {
-
-                        MissingPerson missingPerson = new MissingPerson(ds.child("contact").getValue(String.class),
-                                ds.child("image").getValue(String.class), ds.child("location").getValue(String.class),
-                                ds.child("name").getValue(String.class));
-                        arrayList.add("NAME     : " + missingPerson.getName() +
-                                "\nLOCATION : " + missingPerson.getLocation() +
-                                "\nCONTACT  : " + missingPerson.getContact());
-                    }
-                    ArrayAdapter adapter = new ArrayAdapter(ViewMissingPersonList.this, android.R.layout.simple_list_item_1, arrayList);
-                    listView.setAdapter(adapter);
-
-                }
-                Query query1 = ref.orderByChild("location").equalTo(res);
-                query1.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot.exists()) {
-
-                        } else {
-                            Toast.makeText(ViewMissingPersonList.this, "No Data Found", Toast.LENGTH_SHORT).show();
-
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
 
     @Override
     protected void onStart() {
@@ -178,8 +53,26 @@ public class ViewMissingPersonList extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.app_menu, menu);
-        return true;
+        inflater.inflate(R.menu.search_menu, menu);
+        MenuItem item=menu.findItem(R.id.search);
+
+        SearchView searchView=(SearchView)item.getActionView();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+               getSearchResult(s);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                getSearchResult(s);
+                return false;
+            }
+        });
+
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -205,5 +98,20 @@ public class ViewMissingPersonList extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
 
         }
+    }
+
+    private void getSearchResult(String s)
+    {
+        FirebaseRecyclerOptions<MissingPerson> options =
+                new FirebaseRecyclerOptions.Builder<MissingPerson>()
+                        .setQuery(FirebaseDatabase.getInstance().getReference().child("MissingPersons").orderByChild("location").startAt(s).endAt(s+"\uf8ff"), MissingPerson.class)
+                        .build();
+
+        adapter=new MyAdapter(options);
+        adapter.startListening();
+        recview.setAdapter(adapter);
+
+
+
     }
 }
