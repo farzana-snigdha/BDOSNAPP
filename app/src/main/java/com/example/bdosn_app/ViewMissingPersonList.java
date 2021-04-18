@@ -25,7 +25,7 @@ public class ViewMissingPersonList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_missing_person_list);
 
-        recview=(RecyclerView)findViewById(R.id.recview);
+        recview = (RecyclerView) findViewById(R.id.recview);
         recview.setLayoutManager(new LinearLayoutManager(this));
 
         FirebaseRecyclerOptions<MissingPerson> options =
@@ -33,7 +33,7 @@ public class ViewMissingPersonList extends AppCompatActivity {
                         .setQuery(FirebaseDatabase.getInstance().getReference().child("MissingPersons"), MissingPerson.class)
                         .build();
 
-        adapter=new MyAdapter(options);
+        adapter = new MyAdapter(options,getApplicationContext());
         recview.setAdapter(adapter);
     }
 
@@ -54,14 +54,14 @@ public class ViewMissingPersonList extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.search_menu, menu);
-        MenuItem item=menu.findItem(R.id.search);
+        MenuItem item = menu.findItem(R.id.search);
 
-        SearchView searchView=(SearchView)item.getActionView();
+        SearchView searchView = (SearchView) item.getActionView();
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
-               getSearchResult(s);
+                getSearchResult(s);
                 return false;
             }
 
@@ -100,18 +100,15 @@ public class ViewMissingPersonList extends AppCompatActivity {
         }
     }
 
-    private void getSearchResult(String s)
-    {
+    private void getSearchResult(String s) {
         FirebaseRecyclerOptions<MissingPerson> options =
                 new FirebaseRecyclerOptions.Builder<MissingPerson>()
-                        .setQuery(FirebaseDatabase.getInstance().getReference().child("MissingPersons").orderByChild("location").startAt(s).endAt(s+"\uf8ff"), MissingPerson.class)
+                        .setQuery(FirebaseDatabase.getInstance().getReference().child("MissingPersons").orderByChild("location").startAt(s).endAt(s + "\uf8ff"), MissingPerson.class)
                         .build();
 
-        adapter=new MyAdapter(options);
+        adapter = new MyAdapter(options,getApplicationContext());
         adapter.startListening();
         recview.setAdapter(adapter);
-
-
 
     }
 }

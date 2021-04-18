@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:padding="10dp"
-    tools:context=".ViewMissingPersonList">
+    tools:context=".ViewMissingPersonList"
+    android:id="@+id/view_list_parent_layout">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recview"
