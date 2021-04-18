@@ -6,6 +6,13 @@ public class MissingPerson {
     public MissingPerson() {
     }
 
+    public MissingPerson(String contact, String image, String location, String name) {
+        this.contact = contact;
+        this.image = image;
+        this.location = location;
+        this.name = name;
+    }
+
     public MissingPerson(String age, String contact, String desc, String gender, String height, String image, String last_seen, String location, String name, String relation) {
         this.age = age;
         this.contact = contact;

@@ -23,8 +23,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -41,7 +44,8 @@ public class AddMissingPerson extends AppCompatActivity {
     EditText name, location, age, height, gender, relation, description, contact, lastSeen;
     Button confirm;
     Bitmap bitmap;
-
+long maxid=0;
+DatabaseReference ref;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,8 +62,21 @@ public class AddMissingPerson extends AppCompatActivity {
         description =(EditText) findViewById(R.id.general_desc_text);
         contact =(EditText) findViewById(R.id.contact_text);
         lastSeen =(EditText) findViewById(R.id.last_seen_text);
-        missingPhoto.setImageResource(R.drawable.profile_icon);
+   //     missingPhoto.setImageResource(R.drawable.profile_icon);
+ref=FirebaseDatabase.getInstance().getReference().child("MissingPersons");
+ref.addValueEventListener(new ValueEventListener() {
+    @Override
+    public void onDataChange(@NonNull DataSnapshot snapshot) {
+        if(snapshot.exists()){
+            maxid=snapshot.getChildrenCount();
+        }
+    }
 
+    @Override
+    public void onCancelled(@NonNull DatabaseError error) {
+
+    }
+});
 
         missingPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -161,7 +178,8 @@ public class AddMissingPerson extends AppCompatActivity {
                                         description.getText().toString(),gender.getText().toString(),height.getText().toString(),
                                         uri.toString(),lastSeen.getText().toString(),location.getText().toString(),name.getText().toString(),
                                         relation.getText().toString());
-                                root.child(contact.getText().toString()+new Random().nextInt(1200)).setValue(missingPerson);
+                                root.child(String.valueOf((maxid+1)*(-1))).setValue(missingPerson);
+//                                root.child(contact.getText().toString()+new Random().nextInt(1200)).setValue(missingPerson);
 
                                 name.setText("");
                                 age.setText("");
@@ -172,7 +190,7 @@ public class AddMissingPerson extends AppCompatActivity {
                                 gender.setText("");
                                 description.setText("");
                                 contact.setText("");
-                                missingPhoto.setImageResource(R.drawable.profile_icon);
+                                missingPhoto.setImageResource(R.drawable.ic_person);
                                 Toast.makeText(AddMissingPerson.this, "Uploaded Successfully", Toast.LENGTH_SHORT).show();
 
                             }

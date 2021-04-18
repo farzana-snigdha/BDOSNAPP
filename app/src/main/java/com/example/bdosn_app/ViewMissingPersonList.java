@@ -2,10 +2,14 @@ package com.example.bdosn_app;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -16,20 +20,56 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.firebase.ui.database.FirebaseListOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 public class ViewMissingPersonList extends AppCompatActivity {
     ListView listView;
     FirebaseListAdapter adapter;
+    AutoCompleteTextView search;
+    DatabaseReference ref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_missing_person_list);
         listView = findViewById(R.id.missing_list);
+        search = findViewById(R.id.missing_person_search);
+
+        ref = FirebaseDatabase.getInstance().getReference("MissingPersons");
+
+        ValueEventListener event = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                populateSearch(snapshot);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+        ref.addListenerForSingleValueEvent(event);
+
         Query query = FirebaseDatabase.getInstance().getReference().child("MissingPersons");
+
+        populateListView(query);
+//        listView.setOnItemClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//            }
+//        });
+    }
+
+    private void populateListView(Query query) {
         FirebaseListOptions<MissingPerson> options = new FirebaseListOptions.Builder<MissingPerson>()
                 .setLayout(R.layout.row_item)
                 .setQuery(query, MissingPerson.class)
@@ -52,9 +92,72 @@ public class ViewMissingPersonList extends AppCompatActivity {
             }
         };
         listView.setAdapter(adapter);
-        listView.setOnClickListener(new View.OnClickListener() {
+    }
+
+    private void populateSearch(DataSnapshot snapshot) {
+        ArrayList<String> searchResult = new ArrayList<>();
+        if (snapshot.exists()) {
+            for (DataSnapshot ds : snapshot.getChildren()) {
+                String name = ds.child("name").getValue(String.class);
+                String loc = ds.child("location").getValue(String.class);
+                searchResult.add(name);
+                searchResult.add(loc);
+            }
+            ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, searchResult);
+            search.setAdapter(adapter);
+            search.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    String res = search.getText().toString();
+                    getSearchedResult(res);
+                }
+            });
+        } else {
+            Log.d("missing person", "no data found");
+        }
+    }
+
+    private void getSearchedResult(String res) {
+        Query query = ref.orderByChild("name").equalTo(res);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onClick(View view) {
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    ArrayList<String> arrayList = new ArrayList<>();
+                    for (DataSnapshot ds : snapshot.getChildren()) {
+
+                        MissingPerson missingPerson = new MissingPerson(ds.child("contact").getValue(String.class),
+                                ds.child("image").getValue(String.class), ds.child("location").getValue(String.class),
+                                ds.child("name").getValue(String.class));
+                        arrayList.add("NAME     : " + missingPerson.getName() +
+                                "\nLOCATION : " + missingPerson.getLocation() +
+                                "\nCONTACT  : " + missingPerson.getContact());
+                    }
+                    ArrayAdapter adapter = new ArrayAdapter(ViewMissingPersonList.this, android.R.layout.simple_list_item_1, arrayList);
+                    listView.setAdapter(adapter);
+
+                }
+                Query query1 = ref.orderByChild("location").equalTo(res);
+                query1.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+
+                        } else {
+                            Toast.makeText(ViewMissingPersonList.this, "No Data Found", Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
 
             }
         });

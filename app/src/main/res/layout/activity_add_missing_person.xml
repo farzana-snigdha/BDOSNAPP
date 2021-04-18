@@ -16,6 +16,7 @@
         android:id="@+id/missing_photo"
         android:layout_width="150dp"
         android:layout_height="178dp"
+        android:src="@drawable/ic_person"
         />
 
     <TextView
