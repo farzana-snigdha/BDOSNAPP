@@ -284,18 +284,20 @@ public class AddMissingPerson extends AppCompatActivity {
                                         relation.getText().toString());
                                 root.child(String.valueOf((maxid + 1) * (-1))).setValue(missingPerson);
 //                                root.child(contact.getText().toString()+new Random().nextInt(1200)).setValue(missingPerson);
-
-                                name.setText("");
-                                age.setText("");
-                                height.setText("");
-                                location.setText("");
-                                lastSeen.setText("");
-                                relation.setText("");
-                                gender.setText("");
-                                description.setText("");
-                                contact.setText("");
-                                missingPhoto.setImageResource(R.drawable.ic_person);
                                 Toast.makeText(AddMissingPerson.this, "Uploaded Successfully", Toast.LENGTH_SHORT).show();
+
+                                Intent intent3 = new Intent(AddMissingPerson.this, MainActivity.class);
+                                AddMissingPerson.this.startActivity(intent3);
+//                                name.setText("");
+//                                age.setText("");
+//                                height.setText("");
+//                                location.setText("");
+//                                lastSeen.setText("");
+//                                relation.setText("");
+//                                gender.setText("");
+//                                description.setText("");
+//                                contact.setText("");
+//                                missingPhoto.setImageResource(R.drawable.ic_person);
                                 sendNotification();
 
                             }
