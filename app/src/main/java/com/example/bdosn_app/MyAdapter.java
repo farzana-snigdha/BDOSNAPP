@@ -28,9 +28,9 @@ public class MyAdapter extends FirebaseRecyclerAdapter<MissingPerson, MyAdapter.
 
     @Override
     protected void onBindViewHolder(@NonNull myviewholder holder, int position, @NonNull MissingPerson model) {
-        holder.name.setText(model.getName());
-        holder.contact.setText(model.getContact());
-        holder.location.setText(model.getLocation());
+        holder.name.setText("Name   : "+ model.getName());
+        holder.contact.setText("Contact  : "+model.getContact());
+        holder.location.setText("Location : "+ model.getLocation());
         Picasso.get().load(model.getImage()).into(holder.img);
 
 

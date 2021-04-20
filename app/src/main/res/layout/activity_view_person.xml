@@ -256,7 +256,6 @@
     <EditText
         android:id="@+id/profile_contact_text"
         android:layout_width="match_parent"
-        android:editable="false"
         android:layout_height="wrap_content"
         android:layout_below="@id/profile_general_desc_text"
         android:layout_marginLeft="10dp"

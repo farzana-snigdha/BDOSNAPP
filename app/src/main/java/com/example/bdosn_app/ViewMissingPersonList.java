@@ -2,6 +2,7 @@ package com.example.bdosn_app;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -35,6 +36,7 @@ public class ViewMissingPersonList extends AppCompatActivity {
 
         adapter = new MyAdapter(options,getApplicationContext());
         recview.setAdapter(adapter);
+//        Log.d("snxjsnxjbc",new AddMissingPerson().img);
     }
 
 
