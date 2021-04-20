@@ -1,4 +1,4 @@
-package com.example.bdosn_app;
+package com.example.bdosn_app_rescue;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,14 +15,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.Map;
 
 public class ViewMissingPersonProfile extends AppCompatActivity {
     Button backBtn;

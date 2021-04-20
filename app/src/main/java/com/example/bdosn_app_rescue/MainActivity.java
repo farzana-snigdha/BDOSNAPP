@@ -1,4 +1,4 @@
-package com.example.bdosn_app;
+package com.example.bdosn_app_rescue;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;

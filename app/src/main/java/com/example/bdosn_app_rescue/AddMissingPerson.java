@@ -1,4 +1,4 @@
-package com.example.bdosn_app;
+package com.example.bdosn_app_rescue;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,7 +29,6 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -47,10 +45,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.InputStream;
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 import java.util.UUID;
 
 public class AddMissingPerson extends AppCompatActivity {
@@ -64,7 +60,8 @@ public class AddMissingPerson extends AppCompatActivity {
     DatabaseReference ref;
     private RequestQueue requestQueue;
     private String url = "https://fcm.googleapis.com/fcm/send";
-public String img;
+    public String img;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,7 +107,7 @@ public String img;
             @Override
             public void onClick(View view) {
                 uploadInformation();
-                sendNotification();
+               // sendNotification();
             }
         });
     }
@@ -124,7 +121,7 @@ public String img;
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     String loc = ds.child("location").getValue(String.class);
-                     img = ds.child("image").getValue(String.class);
+                    img = ds.child("image").getValue(String.class);
                     String name = ds.child("name").getValue(String.class);
                     String contact = ds.child("contact").getValue(String.class);
                     String lastSeen = ds.child("last_seen").getValue(String.class);
@@ -135,23 +132,23 @@ public String img;
                     String desc = ds.child("desc").getValue(String.class);
                     JSONObject json = new JSONObject();
                     try {
+                        Log.d("njqejqb", String.valueOf(query));
                         json.put("to", "/topics/" + "news");
                         JSONObject notificationObj = new JSONObject();
                         notificationObj.put("title", "Missing Alert");
                         notificationObj.put("body", "Location : " + loc);
 
                         JSONObject extraData = new JSONObject();
-                        extraData.put("location",loc);
-                        extraData.put("image",img);
-                        extraData.put("name",name);
-                        extraData.put("contact",contact);
-                        extraData.put("last_seen",lastSeen);
-                        extraData.put("gender",gender);
-                        extraData.put("relation",relation);
-                        extraData.put("height",height);
-                        extraData.put("age",age);
-                        extraData.put("desc",desc);
-
+                        extraData.put("location", loc);
+                        extraData.put("image", img);
+                        extraData.put("name", name);
+                        extraData.put("contact", contact);
+                        extraData.put("last_seen", lastSeen);
+                        extraData.put("gender", gender);
+                        extraData.put("relation", relation);
+                        extraData.put("height", height);
+                        extraData.put("age", age);
+                        extraData.put("desc", desc);
 
 
                         json.put("notification", notificationObj);
@@ -174,13 +171,13 @@ public String img;
                             public Map<String, String> getHeaders() throws AuthFailureError {
                                 Map<String, String> header = new HashMap<>();
                                 header.put("content-type", "application/json");
-                                header.put("authorization", "key=AAAAzbcuues:APA91bFjvPatEHoLne4E_JPUQUDVxBNh90mAd7_IwXU8rsFBgz-XmX_OHp2qECaE5nnUpXkc50Is8Ih4YXm30YH8uq8V2V1O732iDZZfXnkx3WxGnNFsi4LIeZP0CV2C-9KtRxyEQA6M");
+                                header.put("authorization", "key=AAAA1q9xn2M:APA91bH3yhL5J7eDVOMW1KAwJdMMegSS-t5OWLo-84z8KM2zkU1txg4bOBdx4OmfOG3DtONUA2JgBQLKVz2o1t4sEdS6H5tpObj7BbmwdJkI9Kcv8fmgNq5wu7n1NjUSzo3W-o9N1tqy");
                                 Log.d("MUR", String.valueOf(header));
                                 return header;
                             }
                         };
                         requestQueue.add(request);
-                        Log.d("MUR","123456789");
+                        Log.d("MUR", "123456789");
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -273,11 +270,6 @@ public String img;
 
                                 pd.dismiss();
 
-//                                if(TextUtils.isEmpty(uri.toString())){
-//                                    fImg="#";
-//                                }else {
-//                                    fImg=uri.toString();
-//                                }
                                 MissingPerson missingPerson = new MissingPerson(age.getText().toString().trim(), contact.getText().toString(),
                                         description.getText().toString(), gender.getText().toString(), height.getText().toString(),
                                         uri.toString(), lastSeen.getText().toString(), location.getText().toString(), name.getText().toString(),
@@ -296,11 +288,14 @@ public String img;
                                 contact.setText("");
                                 missingPhoto.setImageResource(R.drawable.ic_person);
                                 Toast.makeText(AddMissingPerson.this, "Uploaded Successfully", Toast.LENGTH_SHORT).show();
+                                sendNotification();
 
                             }
                         });
+
                     }
-                })
+                }
+)
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception exception) {

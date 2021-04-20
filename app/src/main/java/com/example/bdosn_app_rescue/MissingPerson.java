@@ -1,4 +1,4 @@
-package com.example.bdosn_app;
+package com.example.bdosn_app_rescue;
 
 public class MissingPerson {
     String age,contact,desc,gender,height,image,last_seen,location,name,relation;

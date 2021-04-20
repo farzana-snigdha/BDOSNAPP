@@ -1,6 +1,9 @@
-package com.example.bdosn_app;
+package com.example.bdosn_app_rescue;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,8 +27,15 @@ public class ReceiveNotificationActivity extends AppCompatActivity {
         TextView desc1 = findViewById(R.id.profile_general_desc_text);
         TextView contact1 = findViewById(R.id.profile_contact_text);
         ImageView img = findViewById(R.id.profile_missing_photo);
-
-        if (getIntent().hasExtra("name")){
+        Button btn = findViewById(R.id.profile_back_button);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent1 = new Intent(ReceiveNotificationActivity.this, ViewMissingPersonList.class);
+                ReceiveNotificationActivity.this.startActivity(intent1);
+            }
+        });
+        if (getIntent().hasExtra("name")) {
 
 
             String location = getIntent().getStringExtra("location");

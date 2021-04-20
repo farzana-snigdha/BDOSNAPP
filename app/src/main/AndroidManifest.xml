@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.bdosn_app">
+    package="com.example.bdosn_app_rescue">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -17,7 +17,7 @@
         android:theme="@style/Theme.BDOSNAPP">
 
         <service
-            android:name=".MyFirebaseMessagingService"
+            android:name="com.example.bdosn_app_rescue.MyFirebaseMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -33,17 +33,17 @@
 <!--            android:name="com.google.firebase.messaging.default_notification_color"-->
 <!--          />-->
 
-        <activity android:name=".MainActivity">
+        <activity android:name="com.example.bdosn_app_rescue.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AddMissingPerson"></activity>
-        <activity android:name=".ViewMissingPersonList"></activity>
-        <activity android:name=".ViewMissingPersonProfile"></activity>
-<activity android:name=".ReceiveNotificationActivity"/>
+        <activity android:name="com.example.bdosn_app_rescue.AddMissingPerson"></activity>
+        <activity android:name="com.example.bdosn_app_rescue.ViewMissingPersonList"></activity>
+        <activity android:name="com.example.bdosn_app_rescue.ViewMissingPersonProfile"></activity>
+<activity android:name="com.example.bdosn_app_rescue.ReceiveNotificationActivity"/>
 
     </application>
 
