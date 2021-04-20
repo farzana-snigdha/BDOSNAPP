@@ -52,7 +52,7 @@ public class ShareCode extends AppCompatActivity {
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.exists()) {
                         for (DataSnapshot ds : snapshot.getChildren()) {
-                            if (ds.child("email").getValue(String.class).equals(email) && ds.child("phone").getValue(String.class).equals(phone)) {
+                            if (ds.child("email").getValue(String.class).equals(email) && ds.child("name").getValue(String.class).equals(name)) {
                                  code = ds.child("code").getValue(String.class);
 
                             }
