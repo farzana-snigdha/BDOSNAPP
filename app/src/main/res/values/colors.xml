@@ -8,4 +8,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="headbar">#5DE662</color>
+    <color name="colorPrimary">#ff9966</color>
+    <color name="colorPrimaryDark">#ff5e62</color>
+    <color name="colorAccent">#D81B60</color>
 </resources>
