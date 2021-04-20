@@ -35,4 +35,17 @@
                 app:showAsAction="never" />
         </menu>
     </item>
+    <item android:id="@+id/code_menu"
+        android:title="App Code"
+        app:showAsAction="never">
+        <menu>
+            <item android:id="@+id/my_code_sub_menu"
+                android:title="My Code"
+                app:showAsAction="never"/>
+
+            <item android:id="@+id/add_friend_sub_menu"
+                android:title="Add Friend"
+                app:showAsAction="never"/>
+        </menu>
+    </item>
 </menu>

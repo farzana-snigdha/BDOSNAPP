@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">RESCUE</string>
+    <string name="my_text"><u>Back</u></string>
 </resources>

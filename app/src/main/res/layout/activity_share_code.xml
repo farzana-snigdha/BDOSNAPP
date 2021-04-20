@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    tools:context=".ShareCode">
+
+
+    <TextView
+        android:id="@+id/my_code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="150dp"
+        android:gravity="center_horizontal"
+        android:text="XXXXXX"
+        android:textSize="40dp"
+android:textAllCaps="true"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_marginBottom="20dp"/>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Share Your Code With Your          Emergency Contacts"
+        android:layout_marginTop="40dp"
+        android:gravity="center_horizontal"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        />
+    <Button
+        android:id="@+id/send_code_button"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:text="Send"
+        android:backgroundTint="@color/headbar"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:layout_marginTop="45dp"
+        android:textSize="20dp"
+        android:layout_gravity="center"
+        />
+
+
+    <TextView
+        android:id="@+id/back_to_main"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/my_text"
+        android:layout_marginTop="25dp"
+        android:textSize="20dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        />
+</LinearLayout>

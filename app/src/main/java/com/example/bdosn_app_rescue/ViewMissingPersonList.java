@@ -95,6 +95,14 @@ public class ViewMissingPersonList extends AppCompatActivity {
                 Intent intent2 = new Intent(this, ViewMissingPersonList.class);
                 this.startActivity(intent2);
                 return true;
+            case R.id.add_friend_sub_menu:
+                Intent intent3 = new Intent(this, AddFriend.class);
+                this.startActivity(intent3);
+                return true;
+            case R.id.my_code_sub_menu:
+                Intent intent4 = new Intent(this, ShareCode.class);
+                this.startActivity(intent4);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
 
