@@ -209,24 +209,31 @@ public class AddMissingPerson extends AppCompatActivity {
                 Toast.makeText(this, "profile", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.map_menu:
+                Intent intent5 = new Intent(this, MapsActivity.class);
+                this.startActivity(intent5);
+                finish();
                 // startActivity();
-                Toast.makeText(this, "current location", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(this, "current location", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.add_person_sub_menu:
                 Intent intent1 = new Intent(this, AddMissingPerson.class);
                 this.startActivity(intent1);
+                finish();
                 return true;
             case R.id.view_list_sub_menu:
                 Intent intent2 = new Intent(this, ViewMissingPersonList.class);
                 this.startActivity(intent2);
+                finish();
                 return true;
             case R.id.add_friend_sub_menu:
                 Intent intent3 = new Intent(this, AddFriend.class);
                 this.startActivity(intent3);
+                finish();
                 return true;
             case R.id.my_code_sub_menu:
                 Intent intent4 = new Intent(this, ShareCode.class);
                 this.startActivity(intent4);
+                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

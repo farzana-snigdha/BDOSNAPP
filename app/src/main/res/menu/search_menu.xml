@@ -16,7 +16,7 @@
 
     <item
         android:id="@+id/map_menu"
-        android:title="My Location"
+        android:title="View Location"
         app:showAsAction="never" />
 
     <item

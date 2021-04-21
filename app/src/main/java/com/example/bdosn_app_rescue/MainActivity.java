@@ -62,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "profile", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.map_menu:
+                Intent intent5 = new Intent(this, MapsActivity.class);
+                this.startActivity(intent5);
                 // startActivity();
                 Toast.makeText(this, "current location", Toast.LENGTH_SHORT).show();
                 return true;
