@@ -30,7 +30,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Name"
-            android:layout_marginBottom="15sp"
+
+            android:textColorHint="@color/black"
+            />
+        <EditText
+            android:id="@+id/age"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:hint="Age"
             android:textColorHint="@color/black"
             />
         <EditText
@@ -39,7 +47,14 @@
             android:layout_height="wrap_content"
             android:hint="Email"
             android:inputType="textEmailAddress"
-            android:layout_marginBottom="15dp"
+            android:textColorHint="@color/black"
+            />
+        <EditText
+            android:id="@+id/uphone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Your Phone Number"
+            android:inputType="number"
             android:textColorHint="@color/black"
             />
         <EditText
@@ -48,7 +63,6 @@
             android:layout_height="wrap_content"
             android:hint="Password"
             android:inputType="textPassword"
-            android:layout_marginBottom="15dp"
             android:textColorHint="@color/black"
             />
         <EditText
@@ -57,7 +71,6 @@
             android:layout_height="wrap_content"
             android:hint="Confrim Password"
             android:inputType="textPassword"
-            android:layout_marginBottom="15dp"
             android:textColorHint="@color/black"
             />
         <TextView
@@ -95,15 +108,7 @@
             android:hint="Number 3"
             android:textColorHint="@color/black"
             />
-        <EditText
-            android:id="@+id/code"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:layout_marginBottom="15sp"
-            android:hint="Enter a code(must be of length5)"
-            android:textColorHint="@color/black"
-            />
+
 
         <Button
             android:id="@+id/signupbtn"
