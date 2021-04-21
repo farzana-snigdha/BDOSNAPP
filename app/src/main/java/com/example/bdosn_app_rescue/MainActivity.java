@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
-        Log.d("user1234",auth.getUid());
+  //      Log.d("user1234",auth.getUid());
         if (user == null) {
 
                      manager = new PermissionManager() {

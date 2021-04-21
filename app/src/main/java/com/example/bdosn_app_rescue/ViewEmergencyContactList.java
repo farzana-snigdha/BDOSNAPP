@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -27,15 +28,16 @@ import java.util.ArrayList;
 public class ViewEmergencyContactList extends AppCompatActivity {
     RecyclerView recyclerView;
 
-    RecyclerView.Adapter adapter;
-    RecyclerView.LayoutManager layoutManager;
 
     FirebaseAuth auth;
     FirebaseUser user;
     CreateUser createUser;
     ArrayList<CreateUser> namelist;
-    DatabaseReference reference, userReference;
+    DatabaseReference reference, userReference, ref1;
     String emergencyId;
+    MemberAdapter adapter;
+    String ownId;
+    ArrayList<String> mailList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,37 +46,24 @@ public class ViewEmergencyContactList extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
         namelist = new ArrayList<>();
+        recyclerView = findViewById(R.id.emergencyContactList);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.hasFixedSize();
 
-        reference = FirebaseDatabase.getInstance().getReference().child("Users").child(user.getUid()).child("CircleMembers");
-        userReference = FirebaseDatabase.getInstance().getReference().child("Users");
-
+        reference = FirebaseDatabase.getInstance().getReference().child("Users");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                namelist.clear();
-                if (snapshot.exists()) {
-                    for (DataSnapshot ds : snapshot.getChildren()) {
-                        emergencyId = ds.child("circlememberid").getValue(String.class);
-                        userReference.child(emergencyId).addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                createUser = snapshot.getValue(CreateUser.class);
-                                namelist.add(createUser);
-                                adapter.notifyDataSetChanged();
-                            }
+                if(snapshot.exists()){
+                    Log.d("dfghjbhb", String.valueOf(user.getEmail()));
+                    for (DataSnapshot ds:snapshot.getChildren()){
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-                                Log.d("line 71", "viewEmergencyContactList");
-                            }
-                        });
-                        adapter=new MemberAdapter(namelist,getApplicationContext());
-                        recyclerView.setAdapter(adapter);
-                        adapter.notifyDataSetChanged();
+                        if(ds.child("email").getValue(String.class).equals(user.getEmail())){
+                            ownId = ds.child("userId").getValue(String.class);
+                            Log.d("dfghjbhb", ownId);
+
+
+                        }
                     }
                 }
             }
@@ -86,6 +75,13 @@ public class ViewEmergencyContactList extends AppCompatActivity {
         });
 
 
+        FirebaseRecyclerOptions<CreateUser> options =
+                new FirebaseRecyclerOptions.Builder<CreateUser>()
+                        .setQuery(FirebaseDatabase.getInstance().getReference().child("Users").child(ownId).child("CircleMembers"), CreateUser.class)
+                        .build();
+
+        adapter =new   MemberAdapter(options, getApplicationContext());
+        recyclerView.setAdapter(adapter);
     }
 
     @Override

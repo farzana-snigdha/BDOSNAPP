@@ -97,9 +97,9 @@ public class SignUp extends AppCompatActivity {
 
                 //Saves data into Database
                 String key = databaseReference.push().getKey();
-                CreateUser user = new CreateUser(name, age, email, phone, password, em1, em2, em3, code, false, "k", "k", fAuth.getUid());
+                CreateUser user = new CreateUser(name, age, email, phone, password, em1, em2, em3, code, false, "k", "k", key);
                 // Log.d("1234567",fAuth.getUid());
-                root.child(fAuth.getUid()).setValue(user);
+                root.child(key).setValue(user);
 
                 Toast.makeText(getApplicationContext(), "User info added", Toast.LENGTH_SHORT).show();
 

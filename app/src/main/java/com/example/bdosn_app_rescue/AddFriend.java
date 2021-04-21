@@ -31,6 +31,8 @@ public class AddFriend extends AppCompatActivity {
     FirebaseAuth auth;
     String userID, joinUserId;
     Button submitBtn;
+    String ownId ;
+    private String joinUserEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,10 +41,10 @@ public class AddFriend extends AppCompatActivity {
         pinview = findViewById(R.id.add_pin);
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
-        reference = FirebaseDatabase.getInstance().getReference().child("Users").child(user.getUid());
+        reference = FirebaseDatabase.getInstance().getReference().child("Users");
         currentRef = FirebaseDatabase.getInstance().getReference().child("Users").child(user.getUid());
 
-        userID = user.getUid();
+        userID = user.getEmail();
 
         backbtn = findViewById(R.id.back_to_main);
         submitBtn = findViewById(R.id.submit_code_btn);
@@ -56,7 +58,7 @@ public class AddFriend extends AppCompatActivity {
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-submitButtonClicked(view);
+                submitButtonClicked(view);
             }
         });
 
@@ -67,25 +69,37 @@ submitButtonClicked(view);
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()){
+                if (snapshot.exists()) {
                     Log.d("dfghjbhb1", String.valueOf(user.getEmail()));
-                    for (DataSnapshot ds:snapshot.getChildren()){
+                    for (DataSnapshot ds1:snapshot.getChildren()){
+                        if(ds1.child("email").getValue(String.class).equals(userID)){
+                            ownId=ds1.child("userId").getValue(String.class);
+                        }
+                    }
+                    for (DataSnapshot ds : snapshot.getChildren()) {
                         Log.d("dfghjbhb11", String.valueOf(ds.child("code").getValue(int.class)));
-                        Log.d("dfghjbhb111", String.valueOf(pinview.getValue()));
-                        CreateUser createUser = null;
+                        Log.d("dfghjbhb111", pinview.getValue());
 
-                        if(ds.child("code").getValue(int.class).equals(pinview.getValue())){
-                            createUser = ds.getValue(CreateUser.class);
-                            joinUserId = createUser.getUserId();
+                        if (String.valueOf(ds.child("code").getValue(int.class)).equals(String.valueOf(pinview.getValue()))) {
+                            joinUserId = ds.child("userId").getValue(String.class);
+joinUserEmail=ds.child("email").getValue(String.class);
+//                            Log.d("dfghjbwcwchb111", joinUserId);
 
-                            circleRef = FirebaseDatabase.getInstance().getReference().child("Users").child(joinUserId).child("CircleMembers");
-                            CircleJoin circleJoin = new CircleJoin(userID);
-                            CircleJoin circleJoin1 = new CircleJoin(joinUserId);
-                            circleRef.child(user.getUid()).setValue(circleJoin).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            circleRef = FirebaseDatabase.getInstance().getReference().child("Users").child(ownId).child("CircleMembers");
+
+
+                            circleRef.child(joinUserId).setValue(joinUserId).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
                                         Toast.makeText(getApplicationContext(), "Emergency Contact Is Added", Toast.LENGTH_SHORT).show();
+
+                                        Intent intent5 = new Intent(getApplicationContext(), ViewEmergencyContactList.class);
+                                        startActivity(intent5);
+                                        finish();
+
+                                    } else {
+                                        Toast.makeText(getApplicationContext(), "Invitation Code is invalid", Toast.LENGTH_SHORT).show();
 
                                     }
 
@@ -104,43 +118,40 @@ submitButtonClicked(view);
         });
 
 
-
-
-
-        Query query = reference.orderByChild("code").equalTo(pinview.getValue());
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    CreateUser createUser = null;
-                    for (DataSnapshot ds : snapshot.getChildren()) {
-                        createUser = ds.getValue(CreateUser.class);
-                        joinUserId = createUser.getUserId();
-
-                        circleRef = FirebaseDatabase.getInstance().getReference().child("Users").child(joinUserId).child("CircleMembers");
-                        CircleJoin circleJoin = new CircleJoin(userID);
-                        CircleJoin circleJoin1 = new CircleJoin(joinUserId);
-                        circleRef.child(user.getUid()).setValue(circleJoin).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    Toast.makeText(getApplicationContext(), "Emergency Contact Is Added", Toast.LENGTH_SHORT).show();
-
-                                }
-
-                            }
-                        });
-                    }
-                } else {
-                    Toast.makeText(getApplicationContext(), "Invitation Code is invalid", Toast.LENGTH_SHORT).show();
-
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+//        Query query = reference.orderByChild("code").equalTo(pinview.getValue());
+//        query.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                if (snapshot.exists()) {
+//                    CreateUser createUser = null;
+//                    for (DataSnapshot ds : snapshot.getChildren()) {
+//                        createUser = ds.getValue(CreateUser.class);
+//                        joinUserId = createUser.getUserId();
+//
+//                        circleRef = FirebaseDatabase.getInstance().getReference().child("Users").child(joinUserId).child("CircleMembers");
+//                        CircleJoin circleJoin = new CircleJoin(userID);
+//                        CircleJoin circleJoin1 = new CircleJoin(joinUserId);
+//                        circleRef.child(user.getUid()).setValue(circleJoin).addOnCompleteListener(new OnCompleteListener<Void>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<Void> task) {
+//                                if (task.isSuccessful()) {
+//                                    Toast.makeText(getApplicationContext(), "Emergency Contact Is Added", Toast.LENGTH_SHORT).show();
+//
+//                                }
+//
+//                            }
+//                        });
+//                    }
+//                } else {
+//                    Toast.makeText(getApplicationContext(), "Invitation Code is invalid", Toast.LENGTH_SHORT).show();
+//
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
     }
 }

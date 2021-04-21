@@ -1,6 +1,7 @@
 package com.example.bdosn_app_rescue;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,68 +11,55 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 
-public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MembersViewHolder> {
-    ArrayList<CreateUser> namelist;
-    Context c;
+public class MemberAdapter extends FirebaseRecyclerAdapter<CreateUser, MemberAdapter.myviewholder> {
+    private Context mContext;
 
-    public MemberAdapter(ArrayList<CreateUser> namelist, Context c) {
-        this.namelist = namelist;
-        this.c = c;
+    public MemberAdapter(@NonNull FirebaseRecyclerOptions<CreateUser> options, Context context) {
+        super(options);
+        mContext = context;
+    }
+
+    @Override
+    protected void onBindViewHolder(@NonNull myviewholder holder, int position, @NonNull CreateUser model) {
+        holder.name.setText("Name   : " + model.getName());
+
+
+        holder.img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(mContext, ViewMissingPersonProfile.class);
+                intent.putExtra("name", (model.getName()));
+                intent.putExtra("email", model.getEmail());
+                mContext.startActivity(intent);
+            }
+        });
+        //   Glide.with(holder.img.getContext()).load(model.getPurl()).into(holder.img);
     }
 
     @NonNull
     @Override
-    public MembersViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_item_emergency, parent, false);
-        MembersViewHolder membersViewHolder = new MembersViewHolder(v, c, namelist);
-
-        return membersViewHolder;
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull MembersViewHolder holder, int position) {
-        CreateUser currentUserObj = namelist.get(position);
-        holder.name.setText(currentUserObj.getName());
-    }
-
-    @Override
-    public int getItemCount() {
-        return namelist.size();
+    public myviewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_item_emergency, parent, false);
+        return new myviewholder(view);
     }
 
 
-    public static class MembersViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView name;
-        View v;
-        Context c;
-        ArrayList<CreateUser> arrayList;
-        FirebaseAuth auth;
-        FirebaseUser user;
+    class myviewholder extends RecyclerView.ViewHolder {
+        ImageView img;
+        TextView name, contact, location;
 
-        public MembersViewHolder(@NonNull View itemView, Context c, ArrayList<CreateUser> arrayList) {
+        public myviewholder(@NonNull View itemView) {
             super(itemView);
-
-            this.c = c;
-            this.arrayList = arrayList;
-
-            itemView.setOnClickListener(this);
-
-            auth = FirebaseAuth.getInstance();
-            user = auth.getCurrentUser();
-
-            name = itemView.findViewById(R.id.textViewEmergencyName);
-
-        }
-
-        @Override
-        public void onClick(View view) {
-
+            img = (ImageView) itemView.findViewById(R.id.imageViewMissingPerson);
+            name = (TextView) itemView.findViewById(R.id.textViewMissingName);
+            contact = (TextView) itemView.findViewById(R.id.textViewMissingContact);
+            location = (TextView) itemView.findViewById(R.id.textViewMissingLocation);
         }
     }
 }

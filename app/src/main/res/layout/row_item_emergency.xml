@@ -27,12 +27,6 @@
             android:hint="No Contact is Available"
             />
 
-
-
-
-
-
-
     </RelativeLayout>
 
 </androidx.cardview.widget.CardView>

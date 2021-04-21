@@ -50,12 +50,9 @@ public class ShareCode extends AppCompatActivity {
                 if(snapshot.exists()){
                     Log.d("dfghjbhb", String.valueOf(user.getEmail()));
                     for (DataSnapshot ds:snapshot.getChildren()){
-                        Log.d("dfghjbhb", String.valueOf(ds.child("email").getValue(String.class)));
-                        Log.d("dfghjbhb", String.valueOf(user.getEmail()));
 
                         if(ds.child("email").getValue(String.class).equals(user.getEmail())){
                             code = ds.child("code").getValue(int.class);
-                            Log.d("dfghjbhbcode", String.valueOf(code));
                             codeView.setText(String.valueOf(code));
 
                         }
