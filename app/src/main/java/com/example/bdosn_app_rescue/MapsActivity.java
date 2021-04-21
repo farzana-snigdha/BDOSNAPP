@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.content.Intent;
@@ -14,28 +13,25 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
-
-import java.io.FileDescriptor;
-import java.io.PrintWriter;
-import java.util.concurrent.TimeUnit;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
@@ -44,16 +40,40 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     GoogleApiClient client;
     LocationRequest request;
     LatLng latLng;
+    DatabaseReference reference;
+    FirebaseUser user;
+    String lat, longi, userEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+
+        reference = FirebaseDatabase.getInstance().getReference().child("Users");
+        reference.child(user.getUid()).child("latitude").setValue(latLng.latitude);
+        reference.child(user.getUid()).child("longitude").setValue(latLng.longitude);
+
+//        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                reference.child(user.getUid()).child("latitude").setValue(latLng.latitude);
+//                reference.child(user.getUid()).child("longitude").setValue(latLng.longitude);
+//
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
     }
 
 
@@ -67,11 +87,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         client.connect();
 
-
-//        // Add a marker in Sydney and move the camera
-//        LatLng sydney = new LatLng(-34, 151);
-//        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 
     @Override
@@ -90,6 +105,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 Toast.makeText(this, "profile", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.map_menu:
+//                Intent i=new Intent(Intent.ACTION_SEND);
+//                i.setType("text/plain");
+//                i.putExtra(Intent.EXTRA_TEXT,"Location : "+"https://www.google.com/maps/@"+latLng.latitude+","+latLng.longitude+",17z");
+//                startActivity(i.createChooser(i,"Share using: "));
+
                 Intent intent5 = new Intent(this, MapsActivity.class);
                 this.startActivity(intent5);
                 return true;
@@ -117,7 +137,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-    ///////////////////////////////////////////
+    //set current location
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         request = new LocationRequest().create();
@@ -150,10 +170,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         } else {
             latLng = new LatLng(location.getLatitude(), location.getLongitude());
 
-           MarkerOptions markerOptions=new MarkerOptions();
-           markerOptions.position(latLng);
-           markerOptions.title("Current Location");
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(latLng);
+            markerOptions.title("Current Location");
             mMap.addMarker(markerOptions);
         }
     }
+
+
+
 }

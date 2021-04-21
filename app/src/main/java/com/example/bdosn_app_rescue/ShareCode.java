@@ -22,6 +22,8 @@ public class ShareCode extends AppCompatActivity {
     String code;
     TextView codeView, backbtn;
     Button sendBtn;
+    DatabaseReference reference;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,33 +41,18 @@ public class ShareCode extends AppCompatActivity {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            // Name, email address, and profile photo Url
-            String name = user.getDisplayName();
-            String email = user.getEmail();
-            Uri photoUrl = user.getPhotoUrl();
-            String phone = user.getPhoneNumber();
-            DatabaseReference reference = database.getReference().child("Users");
+        reference = FirebaseDatabase.getInstance().getReference().child("Users");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                code = snapshot.child(user.getUid()).child("code").getValue(String.class);
+            }
 
-            reference.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if (snapshot.exists()) {
-                        for (DataSnapshot ds : snapshot.getChildren()) {
-                            if (ds.child("email").getValue(String.class).equals(email) && ds.child("name").getValue(String.class).equals(name)) {
-                                 code = ds.child("code").getValue(String.class);
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
 
-                            }
-                        }
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
-        }
+            }
+        });
         codeView.setText(code);
     }
 }

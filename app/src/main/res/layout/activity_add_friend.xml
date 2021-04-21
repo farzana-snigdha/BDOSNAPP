@@ -1,9 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="20dp"
     tools:context=".AddFriend">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="140dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="Enter The Invitation Code"
+        android:textSize="25sp"
+        android:textStyle="bold" />
+
+    <com.goodiebag.pinview.Pinview
+        android:id="@+id/add_pin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text"
+        android:layout_marginTop="20dp"
+        app:cursorVisible="true"
+        app:forceKeyboard="true"
+        app:inputType="number"
+        app:pinHeight="40dp"
+        app:pinLength="6"
+        app:pinWidth="35dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/submit_code_btn"
+        android:layout_below="@+id/add_pin"
+        android:text="Submit"
+        android:backgroundTint="@color/headbar"
+        android:layout_marginTop="40dp"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/black"
+        />
+
+    <TextView
+        android:id="@+id/back_to_main"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/my_text"
+        android:layout_marginTop="25dp"
+      android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:layout_below="@id/submit_code_btn"
+        />
+
+</RelativeLayout>
