@@ -30,7 +30,9 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.profile_menu:
                // startActivity();
-                Toast.makeText(this,"profile",Toast.LENGTH_SHORT).show();
+                //Sent this sign up for testing
+                Intent intent9 = new Intent(this, SignUp.class);
+                this.startActivity(intent9);
                 return true;
             case R.id.map_menu:
                 // startActivity();

@@ -3,7 +3,7 @@ package com.example.bdosn_app;
 class Userclass {
 
     private String name;
-    private int age;
+    private String age;
     private String email;
     private String phone;
     private String password;
@@ -38,7 +38,7 @@ class Userclass {
         return name;
     }
 
-    public int getAge() {
+    public String getAge() {
         return age;
     }
 
@@ -91,7 +91,7 @@ class Userclass {
         this.name = name;
     }
 
-    public void setAge(int age) {
+    public void setAge(String age) {
         this.age = age;
     }
 
