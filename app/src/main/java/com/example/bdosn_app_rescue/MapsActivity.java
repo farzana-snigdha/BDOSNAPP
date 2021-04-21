@@ -110,8 +110,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 //                i.putExtra(Intent.EXTRA_TEXT,"Location : "+"https://www.google.com/maps/@"+latLng.latitude+","+latLng.longitude+",17z");
 //                startActivity(i.createChooser(i,"Share using: "));
 
-                Intent intent5 = new Intent(this, MapsActivity.class);
-                this.startActivity(intent5);
+                Intent i = new Intent(this, ViewEmergencyContactList.class);
+                this.startActivity(i);
                 return true;
             case R.id.add_person_sub_menu:
                 Intent intent1 = new Intent(this, AddMissingPerson.class);
@@ -142,7 +142,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onConnected(@Nullable Bundle bundle) {
         request = new LocationRequest().create();
         request.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        request.setInterval(1000);
+        request.setInterval(4000);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling

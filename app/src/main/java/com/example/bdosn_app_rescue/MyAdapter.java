@@ -51,7 +51,7 @@ public class MyAdapter extends FirebaseRecyclerAdapter<MissingPerson, MyAdapter.
     @NonNull
     @Override
     public myviewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_item_missing_person, parent, false);
         return new myviewholder(view);
     }
 

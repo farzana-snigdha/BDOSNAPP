@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -38,7 +39,7 @@ public class AddFriend extends AppCompatActivity {
         pinview = findViewById(R.id.add_pin);
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
-        reference = FirebaseDatabase.getInstance().getReference().child("Users");
+        reference = FirebaseDatabase.getInstance().getReference().child("Users").child(user.getUid());
         currentRef = FirebaseDatabase.getInstance().getReference().child("Users").child(user.getUid());
 
         userID = user.getUid();
@@ -55,13 +56,57 @@ public class AddFriend extends AppCompatActivity {
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+submitButtonClicked(view);
             }
         });
 
     }
 
     public void submitButtonClicked(View view) {
+
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    Log.d("dfghjbhb1", String.valueOf(user.getEmail()));
+                    for (DataSnapshot ds:snapshot.getChildren()){
+                        Log.d("dfghjbhb11", String.valueOf(ds.child("code").getValue(int.class)));
+                        Log.d("dfghjbhb111", String.valueOf(pinview.getValue()));
+                        CreateUser createUser = null;
+
+                        if(ds.child("code").getValue(int.class).equals(pinview.getValue())){
+                            createUser = ds.getValue(CreateUser.class);
+                            joinUserId = createUser.getUserId();
+
+                            circleRef = FirebaseDatabase.getInstance().getReference().child("Users").child(joinUserId).child("CircleMembers");
+                            CircleJoin circleJoin = new CircleJoin(userID);
+                            CircleJoin circleJoin1 = new CircleJoin(joinUserId);
+                            circleRef.child(user.getUid()).setValue(circleJoin).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(getApplicationContext(), "Emergency Contact Is Added", Toast.LENGTH_SHORT).show();
+
+                                    }
+
+                                }
+                            });
+
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
+
+
+
         Query query = reference.orderByChild("code").equalTo(pinview.getValue());
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

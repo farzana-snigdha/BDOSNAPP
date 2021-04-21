@@ -39,7 +39,6 @@ public class ViewMissingPersonProfile extends AppCompatActivity {
         Log.d("pkp", "1234567");
         if (getIntent().hasExtra("name") && getIntent().hasExtra("location") &&
                 getIntent().hasExtra("contact") && getIntent().hasExtra("image")) {
-            Log.d("pkp", "ihihohuhujh");
             String imageUrl = getIntent().getStringExtra("image");
             String name = getIntent().getStringExtra("name");
             String location = getIntent().getStringExtra("location");

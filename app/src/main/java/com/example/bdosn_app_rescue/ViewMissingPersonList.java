@@ -84,7 +84,7 @@ public class ViewMissingPersonList extends AppCompatActivity {
                 Toast.makeText(this, "profile", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.map_menu:
-                Intent intent5 = new Intent(this, MapsActivity.class);
+                Intent intent5 = new Intent(this, ViewEmergencyContactList.class);
                 this.startActivity(intent5);
                 return true;
             case R.id.add_person_sub_menu:

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -26,9 +27,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
+        Log.d("user1234",auth.getUid());
         if (user == null) {
-            //   setContentView();
-            manager = new PermissionManager() {
+
+                     manager = new PermissionManager() {
             };
             manager.checkAndRequestPermissions(this);
         }
@@ -58,13 +60,13 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.profile_menu:
                 // startActivity();
-                Toast.makeText(this, "profile", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(this, SignUp.class);
+                this.startActivity(i);
+               // Toast.makeText(this, "profile", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.map_menu:
-                Intent intent5 = new Intent(this, MapsActivity.class);
-                this.startActivity(intent5);
-                // startActivity();
-                Toast.makeText(this, "current location", Toast.LENGTH_SHORT).show();
+                Intent i2 = new Intent(this, ViewEmergencyContactList.class);
+                this.startActivity(i2);
                 return true;
             case R.id.add_person_sub_menu:
                 Intent intent1 = new Intent(this, AddMissingPerson.class);
