@@ -96,9 +96,14 @@ public class SignUp extends AppCompatActivity {
                  databaseReference.child(key).setValue(user);
                  Toast.makeText(getApplicationContext(),"User info added",Toast.LENGTH_SHORT).show();
 
+                 Intent intent = new Intent(SignUp.this, Profile.class);
+                 intent.putExtra("Email",EmailEditText.getText().toString());
+                 startActivity(intent);
+
              }
 
          });
+
 
 
     }

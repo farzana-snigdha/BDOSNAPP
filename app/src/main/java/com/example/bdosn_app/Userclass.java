@@ -16,7 +16,7 @@ class Userclass {
     private String Latitude;
     private String Logitude;
 
-    public Userclass(String name, int age, String email, String phone, String password, String em1, String em2, String em3, String image, int code, boolean isSharing, String latitude, String logitude) {
+    public Userclass(String name, String age, String email, String phone, String password, String em1, String em2, String em3, String image, int code, boolean isSharing, String latitude, String logitude) {
         this.name = name;
         this.age = age;
         this.email = email;
