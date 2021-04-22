@@ -13,7 +13,7 @@
 
     <Button
         android:id="@+id/emergency"
-        android:layout_width="289dp"
+        android:layout_width="match_parent"
         android:layout_height="402dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
@@ -24,11 +24,10 @@
         android:layout_marginTop="85dp"
         android:layout_marginEnd="35dp"
         android:layout_marginBottom="298dp"
+        android:backgroundTint="#ff9966"
         android:text="Emergency"
         android:textColor="@color/black"
-        android:textSize="30dp"
-        android:backgroundTint="#ff9966"
-        />
+        android:textSize="30dp" />
 
     <Button
         android:id="@+id/h999"
