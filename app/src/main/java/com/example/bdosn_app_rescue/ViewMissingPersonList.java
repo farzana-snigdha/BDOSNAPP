@@ -14,11 +14,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class ViewMissingPersonList extends AppCompatActivity {
     RecyclerView recview;
     MyAdapter adapter;
+    FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +30,7 @@ public class ViewMissingPersonList extends AppCompatActivity {
 
         recview = (RecyclerView) findViewById(R.id.recview);
         recview.setLayoutManager(new LinearLayoutManager(this));
-
+user=FirebaseAuth.getInstance().getCurrentUser();
         FirebaseRecyclerOptions<MissingPerson> options =
                 new FirebaseRecyclerOptions.Builder<MissingPerson>()
                         .setQuery(FirebaseDatabase.getInstance().getReference().child("MissingPersons"), MissingPerson.class)
@@ -81,8 +84,13 @@ public class ViewMissingPersonList extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.profile_menu:
                 // startActivity();
-                Toast.makeText(this, "profile", Toast.LENGTH_SHORT).show();
-                return true;
+                if (user == null) {
+                    Intent i = new Intent(this, SignUp.class);
+                    this.startActivity(i);
+                } else {
+                    Intent i31 = new Intent(this, Profile.class);
+                    this.startActivity(i31);
+                }                return true;
             case R.id.map_menu:
                 Intent intent5 = new Intent(this, ViewEmergencyContactList.class);
                 this.startActivity(intent5);

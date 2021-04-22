@@ -29,6 +29,8 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -61,14 +63,14 @@ public class AddMissingPerson extends AppCompatActivity {
     private RequestQueue requestQueue;
     private String url = "https://fcm.googleapis.com/fcm/send";
     public String img;
-
+FirebaseUser user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_missing_person);
         missingPhoto = findViewById(R.id.missing_photo);
         confirm = findViewById(R.id.confirm_button);
-
+user= FirebaseAuth.getInstance().getCurrentUser();
         name = (EditText) findViewById(R.id.missing_name_text);
         location = (EditText) findViewById(R.id.missing_location_text);
         age = (EditText) findViewById(R.id.age_text);
@@ -206,8 +208,13 @@ public class AddMissingPerson extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.profile_menu:
                 // startActivity();
-                Toast.makeText(this, "profile", Toast.LENGTH_SHORT).show();
-                return true;
+                if (user == null) {
+                    Intent i = new Intent(this, SignUp.class);
+                    this.startActivity(i);
+                } else {
+                    Intent i31 = new Intent(this, Profile.class);
+                    this.startActivity(i31);
+                }                return true;
             case R.id.map_menu:
                 Intent i = new Intent(this, ViewEmergencyContactList.class);
                 this.startActivity(i);

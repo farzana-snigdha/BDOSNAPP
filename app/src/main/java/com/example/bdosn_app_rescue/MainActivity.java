@@ -1,6 +1,7 @@
 package com.example.bdosn_app_rescue;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -18,8 +19,18 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,13 +48,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
     FirebaseAuth auth;
     FirebaseUser user;
     PermissionManager manager;
     FusedLocationProviderClient fusedLocationProviderClient;
     DatabaseReference reference, circleRef;
     String ownId;
+
+    private GoogleMap mMap;
+    GoogleApiClient client;
+    LocationRequest request;
+    LatLng latLng;
+    double lat, longi;
+    public static int distance = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,26 +74,52 @@ public class MainActivity extends AppCompatActivity {
         //      Log.d("user1234",auth.getUid());
         if (user == null) {
 
-                     manager = new PermissionManager() {
+            manager = new PermissionManager() {
             };
             manager.checkAndRequestPermissions(this);
-        }
-        else{
+        } else {
 
         }
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-getLocation();
+        //getLocation();
+
+
+
+
+
+        client = new GoogleApiClient.Builder(this)
+                .addApi(LocationServices.API).addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this).build();
+
+        request = new LocationRequest().create();
+        request.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        request.setInterval(24000);
+        request.setFastestInterval(24000);
+        request.setSmallestDisplacement(distance);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 
     private void getLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return;
         }
 
@@ -83,14 +127,14 @@ getLocation();
             @Override
             public void onComplete(@NonNull Task<Location> task) {
                 Location location = task.getResult();
-                if(location != null) {
+                if (location != null) {
                     try {
                         Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
                         List<Address> addresses = geocoder.getFromLocation(
                                 location.getLatitude(), location.getLongitude(), 1
                         );
-insertDataIntoDatabase(addresses.get(0).getLatitude(),addresses.get(0).getLongitude());
-                        Log.d("xdcfvgbhjn",addresses.get(0).getLatitude() + "," + addresses.get(0).getLongitude());
+                        insertDataIntoDatabase(addresses.get(0).getLatitude(), addresses.get(0).getLongitude());
+                        Log.d("xdcfvgbhjn", addresses.get(0).getLatitude() + "," + addresses.get(0).getLongitude());
 
 
                     } catch (IOException e) {
@@ -102,6 +146,7 @@ insertDataIntoDatabase(addresses.get(0).getLatitude(),addresses.get(0).getLongit
         });
 
     }
+
     private void insertDataIntoDatabase(double latitude, double longitude) {
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -142,9 +187,9 @@ insertDataIntoDatabase(addresses.get(0).getLatitude(),addresses.get(0).getLongit
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-       manager.checkResult(requestCode, permissions, grantResults);
-        ArrayList<String> ps=manager.getStatus().get(0).denied;
-        if(ps.isEmpty()){
+        manager.checkResult(requestCode, permissions, grantResults);
+        ArrayList<String> ps = manager.getStatus().get(0).denied;
+        if (ps.isEmpty()) {
 
         }
     }
@@ -161,9 +206,14 @@ insertDataIntoDatabase(addresses.get(0).getLatitude(),addresses.get(0).getLongit
         switch (item.getItemId()) {
             case R.id.profile_menu:
                 // startActivity();
-                Intent i = new Intent(this, SignUp.class);
-                this.startActivity(i);
-               // Toast.makeText(this, "profile", Toast.LENGTH_SHORT).show();
+                if (user == null) {
+                    Intent i = new Intent(this, SignUp.class);
+                    this.startActivity(i);
+                } else {
+                    Intent i31 = new Intent(this, Profile.class);
+                    this.startActivity(i31);
+                }
+                // Toast.makeText(this, "profile", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.map_menu:
                 Intent i2 = new Intent(this, ViewEmergencyContactList.class);
@@ -193,5 +243,79 @@ insertDataIntoDatabase(addresses.get(0).getLatitude(),addresses.get(0).getLongit
                 return super.onOptionsItemSelected(item);
 
         }
+    }
+
+
+    //set current location
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        client = new GoogleApiClient.Builder(this)
+                .addApi(LocationServices.API).addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this).build();
+
+        client.connect();
+
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        request = new LocationRequest().create();
+        request.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        request.setInterval(24000);
+        request.setFastestInterval(24000);
+        request.setSmallestDisplacement(distance);
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            return;
+        }
+        LocationServices.FusedLocationApi.requestLocationUpdates(client, request, this);
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        client.connect();
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        Marker marker;
+
+        if (location == null) {
+            Toast.makeText(getApplicationContext(), "Could not get location", Toast.LENGTH_SHORT).show();
+
+        } else {
+
+            latLng = new LatLng(location.getLatitude(), location.getLongitude());
+            mMap.clear();
+            Log.d("hhihio", location.getLatitude() + " " + location.getLongitude());
+            marker = mMap.addMarker(new MarkerOptions().position(latLng).title("Current Location"));
+            insertDataIntoDatabase(location.getLatitude(), location.getLongitude());
+
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //  client.connect();
+
+    }
+
+    @Override
+    protected void onStop() {
+
+        if (user != null) {
+            client.connect();
+        }
+        super.onStop();
     }
 }

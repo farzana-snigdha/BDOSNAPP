@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -115,6 +118,56 @@ public class SignUp extends AppCompatActivity {
         manager.checkResult(requestCode, permissions, grantResults);
         ArrayList<String> ps = manager.getStatus().get(0).denied;
         if (ps.isEmpty()) {
+
+        }
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.app_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.profile_menu:
+                // startActivity();
+                if (user == null) {
+                    Intent i = new Intent(this, SignUp.class);
+                    this.startActivity(i);
+                } else {
+                    Intent i31 = new Intent(this, Profile.class);
+                    this.startActivity(i31);
+                }
+                // Toast.makeText(this, "profile", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.map_menu:
+                Intent i2 = new Intent(this, ViewEmergencyContactList.class);
+                this.startActivity(i2);
+                return true;
+            case R.id.add_person_sub_menu:
+                Intent intent1 = new Intent(this, AddMissingPerson.class);
+                this.startActivity(intent1);
+                finish();
+                return true;
+            case R.id.view_list_sub_menu:
+                Intent intent2 = new Intent(this, ViewMissingPersonList.class);
+                this.startActivity(intent2);
+                finish();
+                return true;
+            case R.id.add_friend_sub_menu:
+                Intent intent3 = new Intent(this, AddFriend.class);
+                this.startActivity(intent3);
+                finish();
+                return true;
+            case R.id.my_code_sub_menu:
+                Intent intent4 = new Intent(this, ShareCode.class);
+                this.startActivity(intent4);
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
 
         }
     }

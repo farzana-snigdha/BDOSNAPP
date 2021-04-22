@@ -89,15 +89,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 longi = ds.child("Longitude").getValue(double.class);
 
                                 {
-                                    mMap.clear();
                                     // Add a marker in Sydney and move the camera
                                     LatLng sydney = new LatLng(lat, longi);
                                     mMap.addMarker(new MarkerOptions().position(sydney).title("Location Of "+ds.child("name").getValue(String.class)));
+                                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney,15f));
                                 }
 
                             }
                             else {
-                                Toast.makeText(getApplicationContext(),"Couldn't Get The Location",Toast.LENGTH_SHORT).show();
+                              //  Toast.makeText(getApplicationContext(),"Couldn't Get The Location",Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
@@ -154,17 +154,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
 
-        client = new GoogleApiClient.Builder(this)
-                .addApi(LocationServices.API).addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this).build();
-
-        client.connect();
-
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -179,13 +169,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         switch (item.getItemId()) {
             case R.id.profile_menu:
                 // startActivity();
-                Toast.makeText(this, "profile", Toast.LENGTH_SHORT).show();
-                return true;
+                if (user == null) {
+                    Intent i = new Intent(this, SignUp.class);
+                    this.startActivity(i);
+                } else {
+                    Intent i31 = new Intent(this, Profile.class);
+                    this.startActivity(i31);
+                }                return true;
             case R.id.map_menu:
-//                Intent i=new Intent(Intent.ACTION_SEND);
-//                i.setType("text/plain");
-//                i.putExtra(Intent.EXTRA_TEXT,"Location : "+"https://www.google.com/maps/@"+latLng.latitude+","+latLng.longitude+",17z");
-//                startActivity(i.createChooser(i,"Share using: "));
 
                 Intent i = new Intent(this, ViewEmergencyContactList.class);
                 this.startActivity(i);
@@ -216,6 +207,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     //set current location
     @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        client = new GoogleApiClient.Builder(this)
+                .addApi(LocationServices.API).addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this).build();
+
+        client.connect();
+
+    }
+    @Override
     public void onConnected(@Nullable Bundle bundle) {
         request = new LocationRequest().create();
         request.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
@@ -242,20 +244,20 @@ client.connect();
 
     @Override
     public void onLocationChanged(Location location) {
-        Marker marker;
-
-        if (location == null) {
-            Toast.makeText(getApplicationContext(), "Could not get location", Toast.LENGTH_SHORT).show();
-
-        } else {
-
-            latLng = new LatLng(location.getLatitude(), location.getLongitude());
-            mMap.clear();
-
-            marker = mMap.addMarker(new MarkerOptions().position(latLng).title("Current Location"));
-            insertDataIntoDatabase(location.getLatitude(), location.getLongitude());
-
-        }
+//        Marker marker;
+//
+//        if (location == null) {
+//            Toast.makeText(getApplicationContext(), "Could not get location", Toast.LENGTH_SHORT).show();
+//
+//        } else {
+//
+//            latLng = new LatLng(location.getLatitude(), location.getLongitude());
+//            mMap.clear();
+//
+//            marker = mMap.addMarker(new MarkerOptions().position(latLng).title("Current Location"));
+//            insertDataIntoDatabase(location.getLatitude(), location.getLongitude());
+//
+//        }
     }
 
 

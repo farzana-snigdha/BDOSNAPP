@@ -1,9 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:layout_constraintTop_toTopOf="parent"
+    android:background="@drawable/login_background"
+    android:padding="15dp"
+    android:weightSum="10"
     tools:context=".Profile">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/profile"
+        android:layout_width="match_parent"
+        android:text="PROFILE"
+        android:textAlignment="center"
+        android:textColor="#000"
+        android:textSize="28sp"
+        android:layout_weight="1.0"
+        android:padding="15dp"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:layout_weight="1.0"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Name"
+        android:textSize="24sp"
+        android:textColor="@color/black"
+android:id="@+id/name"
+        android:padding="12dp"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Age"
+        android:textSize="24sp"
+        android:textColor="@color/black"
+        android:layout_weight="1.0"
+        android:padding="12dp"
+        android:id="@+id/age"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Email"
+        android:textSize="24sp"
+        android:textColor="@color/black"
+        android:layout_weight="1.0"
+        android:padding="12dp"
+        android:id="@+id/email"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Your phone Number"
+        android:textSize="24sp"
+        android:textColor="@color/black"
+        android:layout_weight="1.0"
+        android:padding="15dp"
+        android:id="@+id/uphone"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Code"
+        android:textSize="24sp"
+        android:textColor="@color/black"
+        android:layout_weight="1.0"
+        android:padding="15dp"
+        android:id="@+id/code"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="******"
+        android:textSize="24sp"
+        android:textColor="@color/black"
+        android:layout_weight="1.0"
+        android:padding="15dp"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Your Emergency Numbers"
+        android:textSize="24sp"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/black"
+        android:layout_weight="1.0"
+        android:padding="12dp"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="1111111111"
+        android:textSize="24sp"
+        android:textColor="@color/black"
+        android:layout_weight="1.0"
+        android:padding="15dp"
+        android:id="@+id/n1"
+        />
+    <TextView
+        android:id="@+id/n2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="22222222222"
+        android:textSize="24sp"
+        android:textColor="@color/black"
+        android:layout_weight="1.0"
+        android:padding="15dp"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="333333333"
+        android:textSize="24sp"
+        android:textColor="@color/black"
+        android:layout_weight="1.0"
+        android:padding="15dp"
+        android:id="@+id/n3"
+        />
+
+
+
+
+
+</LinearLayout>
