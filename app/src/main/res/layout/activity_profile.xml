@@ -1,25 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:layout_constraintTop_toTopOf="parent"
+    android:background="@drawable/login_background"
+    android:padding="15dp"
+    android:weightSum="10"
     tools:context=".Profile">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/login_background"
-        android:padding="15dp"
-        android:weightSum="14"
-
-        >
 
         <TextView
-            android:id="@+id/signup"
+            android:id="@+id/profile"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:layout_marginBottom="15dp"
             android:text="PROFILE"
             android:textAlignment="center"
@@ -29,12 +23,13 @@
             android:padding="15dp"
             />
         <TextView
+            android:layout_weight="1.0"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Name"
             android:textSize="24sp"
             android:textColor="@color/black"
-            android:layout_weight="1.0"
+
             android:padding="15dp"
             />
         <TextView
@@ -125,5 +120,5 @@
 
 
 
-    </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>
