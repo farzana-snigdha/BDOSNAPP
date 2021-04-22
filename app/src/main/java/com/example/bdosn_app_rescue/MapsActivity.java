@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -20,11 +21,15 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -40,9 +45,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     GoogleApiClient client;
     LocationRequest request;
     LatLng latLng;
-    DatabaseReference reference;
+    DatabaseReference reference, circleRef;
     FirebaseUser user;
-    String lat, longi, userEmail;
+    double lat, longi;
+    String ownId;
+    public static int distance=10;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,26 +62,95 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-
         reference = FirebaseDatabase.getInstance().getReference().child("Users");
-        reference.child(user.getUid()).child("latitude").setValue(latLng.latitude);
-        reference.child(user.getUid()).child("longitude").setValue(latLng.longitude);
 
-//        reference.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                reference.child(user.getUid()).child("latitude").setValue(latLng.latitude);
-//                reference.child(user.getUid()).child("longitude").setValue(latLng.longitude);
-//
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
+        getIncomingIntent();
+
+    }
+
+    private void getIncomingIntent() {
+        Log.d("pkp", "1234567");
+        if (getIntent().hasExtra("name") && getIntent().hasExtra("email") &&
+                getIntent().hasExtra("userId")) {
+            String email = getIntent().getStringExtra("email");
+            String name = getIntent().getStringExtra("name");
+            String userId = getIntent().getStringExtra("userId");
+
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference reference = database.getReference().child("Users");
+
+            reference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        for (DataSnapshot ds : snapshot.getChildren()) {
+                            if (ds.child("userId").getValue(String.class).equals(userId) && ds.child("Latitude").exists() && ds.child("Longitude").exists()) {
+                                lat = ds.child("Latitude").getValue(double.class);
+                                longi = ds.child("Longitude").getValue(double.class);
+
+                                {
+                                    mMap.clear();
+                                    // Add a marker in Sydney and move the camera
+                                    LatLng sydney = new LatLng(lat, longi);
+                                    mMap.addMarker(new MarkerOptions().position(sydney).title("Location Of "+ds.child("name").getValue(String.class)));
+                                }
+
+                            }
+                            else {
+                                Toast.makeText(getApplicationContext(),"Couldn't Get The Location",Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                }
+
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+            Log.d("njni", lat + "  " + longi);
+
+        }
+    }
+
+
+    private void insertDataIntoDatabase(double latitude, double longitude) {
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    Log.d("dfghjbhb1", String.valueOf(user.getEmail()));
+                    for (DataSnapshot ds1 : snapshot.getChildren()) {
+                        if (ds1.child("email").getValue(String.class).equals(user.getEmail())) {
+
+                            ownId = ds1.child("userId").getValue(String.class);
+                            circleRef = FirebaseDatabase.getInstance().getReference().child("Users").child(ownId);
+                            circleRef.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    circleRef.child("Latitude").setValue(String.valueOf(latitude));
+                                    circleRef.child("Longitude").setValue(String.valueOf(longitude));
+
+                                    Log.d("fwtsftftxc", String.valueOf(latLng.latitude) + "," + String.valueOf(latLng.longitude));
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
 
@@ -142,7 +219,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onConnected(@Nullable Bundle bundle) {
         request = new LocationRequest().create();
         request.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        request.setInterval(4000);
+        request.setInterval(14000);
+        request.setSmallestDisplacement(distance);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -154,7 +232,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onConnectionSuspended(int i) {
-
+client.connect();
     }
 
     @Override
@@ -164,19 +242,21 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onLocationChanged(Location location) {
+        Marker marker;
+
         if (location == null) {
             Toast.makeText(getApplicationContext(), "Could not get location", Toast.LENGTH_SHORT).show();
 
         } else {
-            latLng = new LatLng(location.getLatitude(), location.getLongitude());
 
-            MarkerOptions markerOptions = new MarkerOptions();
-            markerOptions.position(latLng);
-            markerOptions.title("Current Location");
-            mMap.addMarker(markerOptions);
+            latLng = new LatLng(location.getLatitude(), location.getLongitude());
+            mMap.clear();
+
+            marker = mMap.addMarker(new MarkerOptions().position(latLng).title("Current Location"));
+            insertDataIntoDatabase(location.getLatitude(), location.getLongitude());
+
         }
     }
-
 
 
 }

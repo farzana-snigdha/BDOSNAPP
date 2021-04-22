@@ -2,4 +2,6 @@
     <string name="app_name">RESCUE</string>
     <string name="my_text"><u>Back</u></string>
     <string name="title_activity_maps">Map</string>
+    <string name="emergency_contact">Emergency Contact</string>
+    <string name="title_activity_maps2">Map</string>
 </resources>

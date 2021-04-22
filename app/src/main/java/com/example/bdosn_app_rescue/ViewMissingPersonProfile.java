@@ -20,11 +20,12 @@ import com.squareup.picasso.Picasso;
 
 public class ViewMissingPersonProfile extends AppCompatActivity {
     Button backBtn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_person);
-        backBtn=findViewById(R.id.profile_back_button);
+        backBtn = findViewById(R.id.profile_back_button);
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -50,20 +51,20 @@ public class ViewMissingPersonProfile extends AppCompatActivity {
             reference.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                   if(snapshot.exists()){
-                       for (DataSnapshot ds:snapshot.getChildren()){
-                           if(ds.child("image").getValue(String.class).equals(imageUrl)) {
-                               String lastSeen = ds.child("last_seen").getValue(String.class);
-                               String gender = ds.child("gender").getValue(String.class);
-                               String relation = ds.child("relation").getValue(String.class);
-                               String height = ds.child("height").getValue(String.class);
-                               String age = ds.child("age").getValue(String.class);
-                               String desc = ds.child("desc").getValue(String.class);
-                               setImage(imageUrl, name, lastSeen, location, age, height, relation, gender, desc, contact);
+                    if (snapshot.exists()) {
+                        for (DataSnapshot ds : snapshot.getChildren()) {
+                            if (ds.child("image").getValue(String.class).equals(imageUrl)) {
+                                String lastSeen = ds.child("last_seen").getValue(String.class);
+                                String gender = ds.child("gender").getValue(String.class);
+                                String relation = ds.child("relation").getValue(String.class);
+                                String height = ds.child("height").getValue(String.class);
+                                String age = ds.child("age").getValue(String.class);
+                                String desc = ds.child("desc").getValue(String.class);
+                                setImage(imageUrl, name, lastSeen, location, age, height, relation, gender, desc, contact);
 
-                           }
-                       }
-                   }
+                            }
+                        }
+                    }
                 }
 
                 @Override
@@ -75,7 +76,7 @@ public class ViewMissingPersonProfile extends AppCompatActivity {
     }
 
 
-     private void setImage(String imageUrl, String imageName, String lastSeen, String location, String age, String height, String relation, String gender, String desc, String contact) {
+    private void setImage(String imageUrl, String imageName, String lastSeen, String location, String age, String height, String relation, String gender, String desc, String contact) {
 
         TextView name = findViewById(R.id.profile_missing_name_text);
         TextView lastSeen1 = findViewById(R.id.profile_last_seen_text);
@@ -89,7 +90,7 @@ public class ViewMissingPersonProfile extends AppCompatActivity {
         ImageView img = findViewById(R.id.profile_missing_photo);
 
         name.setText(imageName);
-              lastSeen1.setText(lastSeen);
+        lastSeen1.setText(lastSeen);
         location1.setText(location);
         age1.setText(age);
         height1.setText(height);
@@ -98,7 +99,7 @@ public class ViewMissingPersonProfile extends AppCompatActivity {
         desc1.setText(desc);
         contact1.setText(contact);
         Picasso.get().load(imageUrl).into(img);
-      //  Log.d("pkp", contact);
+        //  Log.d("pkp", contact);
 
     }
 }
