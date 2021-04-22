@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.Intent;
@@ -11,12 +12,15 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -55,7 +59,11 @@ public class MainActivity extends AppCompatActivity {
     FusedLocationProviderClient fusedLocationProviderClient;
     DatabaseReference reference, circleRef;
     String ownId;
-
+    private static final int REQUEST_CALL = 1;
+    Button EmBtn;
+    Button Emn1;
+    Button Emn2;
+    private String number;
 
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
@@ -86,18 +94,34 @@ public class MainActivity extends AppCompatActivity {
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         getLocation();
+        Emn1 = findViewById(R.id.h999);
+        Emn2 = findViewById(R.id.h109);
+        EmBtn = findViewById(R.id.emergency);
+        Emn1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                makePhoneCall("999");
+            }
+        });
+        Emn2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                makePhoneCall("109");
+            }
+        });
 
+    }
 
+    private void makePhoneCall(String number1) {
+        number = number1;
 
-
-
-
-
-
-
-
-
-
+        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[]{Manifest.permission.CALL_PHONE}, REQUEST_CALL);
+        } else {
+            String dial = "tel:" + number;
+            startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial)));
+        }
 
     }
 
@@ -170,10 +194,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        manager.checkResult(requestCode, permissions, grantResults);
-        ArrayList<String> ps = manager.getStatus().get(0).denied;
-        if (ps.isEmpty()) {
-
+        if (requestCode == REQUEST_CALL) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                makePhoneCall(number);
+            } else {
+                Toast.makeText(this, "Permission DENIED", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -229,11 +255,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     @Override
     protected void onStart() {
         super.onStart();
-getLocation();
+        getLocation();
     }
 
     @Override
