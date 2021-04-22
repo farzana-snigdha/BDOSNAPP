@@ -48,7 +48,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class MainActivity extends AppCompatActivity {
     FirebaseAuth auth;
     FirebaseUser user;
     PermissionManager manager;
@@ -56,12 +56,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     DatabaseReference reference, circleRef;
     String ownId;
 
-    private GoogleMap mMap;
-    GoogleApiClient client;
-    LocationRequest request;
-    LatLng latLng;
-    double lat, longi;
-    public static int distance = 10;
+
+
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+
+    /**
+     * Flag indicating whether a requested permission has been denied after returning in
+     * {@link #onRequestPermissionsResult(int, String[], int[])}.
+     */
+    private boolean permissionDenied = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,29 +83,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         } else {
 
         }
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        //getLocation();
-
-
-
-
-
-        client = new GoogleApiClient.Builder(this)
-                .addApi(LocationServices.API).addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this).build();
-
-        request = new LocationRequest().create();
-        request.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        request.setInterval(24000);
-        request.setFastestInterval(24000);
-        request.setSmallestDisplacement(distance);
-
-
-
-
+        getLocation();
 
 
 
@@ -161,8 +144,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             circleRef.addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    circleRef.child("Latitude").setValue(String.valueOf(latitude));
-                                    circleRef.child("Longitude").setValue(String.valueOf(longitude));
+                                    circleRef.child("Latitude").setValue((latitude));
+                                    circleRef.child("Longitude").setValue((longitude));
 
                                 }
 
@@ -246,76 +229,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
-    //set current location
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-
-        client = new GoogleApiClient.Builder(this)
-                .addApi(LocationServices.API).addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this).build();
-
-        client.connect();
-
-    }
-
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        request = new LocationRequest().create();
-        request.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        request.setInterval(24000);
-        request.setFastestInterval(24000);
-        request.setSmallestDisplacement(distance);
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            return;
-        }
-        LocationServices.FusedLocationApi.requestLocationUpdates(client, request, this);
-
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-        client.connect();
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        Marker marker;
-
-        if (location == null) {
-            Toast.makeText(getApplicationContext(), "Could not get location", Toast.LENGTH_SHORT).show();
-
-        } else {
-
-            latLng = new LatLng(location.getLatitude(), location.getLongitude());
-            mMap.clear();
-            Log.d("hhihio", location.getLatitude() + " " + location.getLongitude());
-            marker = mMap.addMarker(new MarkerOptions().position(latLng).title("Current Location"));
-            insertDataIntoDatabase(location.getLatitude(), location.getLongitude());
-
-        }
-    }
 
     @Override
     protected void onStart() {
         super.onStart();
-        //  client.connect();
-
+getLocation();
     }
 
     @Override
-    protected void onStop() {
-
-        if (user != null) {
-            client.connect();
-        }
-        super.onStop();
+    protected void onResume() {
+        super.onResume();
+        getLocation();
     }
 }

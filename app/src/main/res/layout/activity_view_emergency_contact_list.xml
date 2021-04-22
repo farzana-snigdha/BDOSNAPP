@@ -5,8 +5,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="20dp"
-    tools:context=".ViewEmergencyContactList">
+    tools:context=".ViewEmergencyContactList"
 
+    >
+
+    <TextView
+        android:id="@+id/textViewMyLocation"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="15dp"
+        android:gravity="center"
+        android:text="My Location"
+        android:textAlignment="center"
+        android:textSize="25dp"
+        app:layout_constraintBottom_toTopOf="@+id/textView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="15dp"
+        android:paddingLeft="10dp"
+        android:text="Friends"
+        android:textSize="35dp"
+        app:layout_constraintBottom_toTopOf="@+id/textViewEm1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewMyLocation" />
 
     <TextView
         android:id="@+id/textViewEm1"
@@ -20,7 +48,7 @@
         app:layout_constraintBottom_toTopOf="@+id/textViewEm2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <TextView
         android:id="@+id/textViewEm2"
@@ -41,9 +69,6 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="15dp"
-        android:layout_marginStart="1dp"
-        android:layout_marginEnd="1dp"
-        android:layout_marginBottom="9dp"
         android:gravity="center"
         android:text="@string/emergency_contact"
         android:textAlignment="center"
@@ -57,9 +82,8 @@
         android:id="@+id/textViewBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:layout_marginBottom="220dp"
-        android:gravity="center"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="150dp"
         android:text="@string/my_text"
         android:textAllCaps="true"
         android:textSize="25dp"

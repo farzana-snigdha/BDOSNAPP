@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ViewEmergencyContactList extends AppCompatActivity {
-    TextView e1, e2, e3, back;
+    TextView e1, e2, e3, back,loc;
     long maxid = 0;
     FirebaseUser user;
     FirebaseAuth auth;
@@ -44,6 +44,7 @@ public class ViewEmergencyContactList extends AppCompatActivity {
         e2 = findViewById(R.id.textViewEm2);
         e3 = findViewById(R.id.textViewEm3);
         back = findViewById(R.id.textViewBack);
+        loc=findViewById(R.id.textViewMyLocation);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -65,15 +66,21 @@ public class ViewEmergencyContactList extends AppCompatActivity {
                     for (DataSnapshot ds1 : st.getChildren()) {
                         if (ds1.child("email").getValue(String.class).equals(userID)) {
                             ownId = ds1.child("userId").getValue(String.class);
-                        }
+                            loc.setText(ds1.child("name").getValue(String.class));
+                            loc.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+
+                                    Intent i=new Intent(getApplicationContext(),MapsActivity.class);
+                                    i.putExtra("name",ds1.child("name").getValue(String.class));
+                                    i.putExtra("email",ds1.child("email").getValue(String.class));
+                                    i.putExtra("userId",ds1.child("userId").getValue(String.class));
+                                    startActivity(i);
+                                }
+                            });                        }
                     }
                     for (DataSnapshot ds : st.getChildren()) {
 
-//                        if (String.valueOf(ds.child("code").getValue(int.class)).equals(String.valueOf(pinview.getValue()))) {
-//                            joinUserId = ds.child("userId").getValue(String.class);
-////                            Log.d("dfghjbwcwchb111", joinUserId);
-//                            Log.d("dfghjbhb11", String.valueOf(ds.child("code").getValue(int.class)));
-//                            Log.d("dfghjbhb111", ownId);
 
                         circleRef = FirebaseDatabase.getInstance().getReference().child("Users").child(ownId).child("CircleMembers");
                         circleRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -93,7 +100,7 @@ public class ViewEmergencyContactList extends AppCompatActivity {
                                 e1.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-
+Log.d("fghj",st.child(arr.get(0)).child("userId").getValue(String.class));
                                         Intent i=new Intent(getApplicationContext(),MapsActivity.class);
                                         i.putExtra("name",st.child(arr.get(0)).child("name").getValue(String.class));
                                         i.putExtra("email",st.child(arr.get(0)).child("email").getValue(String.class));

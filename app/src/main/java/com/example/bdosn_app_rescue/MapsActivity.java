@@ -75,6 +75,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             String email = getIntent().getStringExtra("email");
             String name = getIntent().getStringExtra("name");
             String userId = getIntent().getStringExtra("userId");
+            Log.d("gcfyugugygygcf",userId);
+
 
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             DatabaseReference reference = database.getReference().child("Users");
@@ -84,7 +86,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.exists()) {
                         for (DataSnapshot ds : snapshot.getChildren()) {
-                            if (ds.child("userId").getValue(String.class).equals(userId) && ds.child("Latitude").exists() && ds.child("Longitude").exists()) {
+                            Log.d("gcfcf",ds.child("userId").getValue(String.class));
+                            if (ds.child("userId").getValue(String.class).equals(userId) ) {
                                 lat = ds.child("Latitude").getValue(double.class);
                                 longi = ds.child("Longitude").getValue(double.class);
 
