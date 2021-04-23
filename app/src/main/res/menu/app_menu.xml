@@ -26,7 +26,7 @@
     </item>
 
     <item android:id="@+id/code_menu"
-        android:title="App Code"
+        android:title="Invite Code"
         app:showAsAction="never">
         <menu>
             <item android:id="@+id/my_code_sub_menu"

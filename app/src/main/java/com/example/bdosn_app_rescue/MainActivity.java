@@ -92,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
             manager = new PermissionManager() {
             };
             manager.checkAndRequestPermissions(this);
+
         } else {
         }
 
