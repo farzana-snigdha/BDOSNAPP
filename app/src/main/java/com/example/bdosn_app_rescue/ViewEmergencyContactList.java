@@ -2,8 +2,14 @@ package com.example.bdosn_app_rescue;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -13,6 +19,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -23,18 +31,22 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
 
 public class ViewEmergencyContactList extends AppCompatActivity {
-    TextView e1, e2, e3, back,loc;
+    TextView e1, e2, e3, back, loc;
     long maxid = 0;
     FirebaseUser user;
     FirebaseAuth auth;
-    DatabaseReference reference, circleRef;
+    DatabaseReference reference, circleRef,locRef;
     String ownId;
     String userID;
     ArrayList<String> arr = new ArrayList<>(Arrays.asList(" ", " ", " ", " "));
+    FusedLocationProviderClient fusedLocationProviderClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +56,7 @@ public class ViewEmergencyContactList extends AppCompatActivity {
         e2 = findViewById(R.id.textViewEm2);
         e3 = findViewById(R.id.textViewEm3);
         back = findViewById(R.id.textViewBack);
-        loc=findViewById(R.id.textViewMyLocation);
+        loc = findViewById(R.id.textViewMyLocation);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -57,6 +69,7 @@ public class ViewEmergencyContactList extends AppCompatActivity {
         user = auth.getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference().child("Users");
         userID = user.getEmail();
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -70,14 +83,15 @@ public class ViewEmergencyContactList extends AppCompatActivity {
                             loc.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-
-                                    Intent i=new Intent(getApplicationContext(),MapsActivity.class);
-                                    i.putExtra("name",ds1.child("name").getValue(String.class));
-                                    i.putExtra("email",ds1.child("email").getValue(String.class));
-                                    i.putExtra("userId",ds1.child("userId").getValue(String.class));
+                                    getLocation();
+                                    Intent i = new Intent(getApplicationContext(), MapsActivity.class);
+                                    i.putExtra("name", ds1.child("name").getValue(String.class));
+                                    i.putExtra("email", ds1.child("email").getValue(String.class));
+                                    i.putExtra("userId", ds1.child("userId").getValue(String.class));
                                     startActivity(i);
                                 }
-                            });                        }
+                            });
+                        }
                     }
                     for (DataSnapshot ds : st.getChildren()) {
 
@@ -100,31 +114,31 @@ public class ViewEmergencyContactList extends AppCompatActivity {
                                 e1.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-Log.d("fghj",st.child(arr.get(0)).child("userId").getValue(String.class));
-                                        Intent i=new Intent(getApplicationContext(),MapsActivity.class);
-                                        i.putExtra("name",st.child(arr.get(0)).child("name").getValue(String.class));
-                                        i.putExtra("email",st.child(arr.get(0)).child("email").getValue(String.class));
-                                        i.putExtra("userId",st.child(arr.get(0)).child("userId").getValue(String.class));
+                                        Log.d("fghj", st.child(arr.get(0)).child("userId").getValue(String.class));
+                                        Intent i = new Intent(getApplicationContext(), MapsActivity.class);
+                                        i.putExtra("name", st.child(arr.get(0)).child("name").getValue(String.class));
+                                        i.putExtra("email", st.child(arr.get(0)).child("email").getValue(String.class));
+                                        i.putExtra("userId", st.child(arr.get(0)).child("userId").getValue(String.class));
                                         startActivity(i);
                                     }
                                 });
                                 e2.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        Intent i=new Intent(getApplicationContext(),MapsActivity.class);
-                                        i.putExtra("name",st.child(arr.get(1)).child("name").getValue(String.class));
-                                        i.putExtra("email",st.child(arr.get(1)).child("email").getValue(String.class));
-                                        i.putExtra("userId",st.child(arr.get(1)).child("userId").getValue(String.class));
+                                        Intent i = new Intent(getApplicationContext(), MapsActivity.class);
+                                        i.putExtra("name", st.child(arr.get(1)).child("name").getValue(String.class));
+                                        i.putExtra("email", st.child(arr.get(1)).child("email").getValue(String.class));
+                                        i.putExtra("userId", st.child(arr.get(1)).child("userId").getValue(String.class));
                                         startActivity(i);
                                     }
                                 });
                                 e3.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        Intent i=new Intent(getApplicationContext(),MapsActivity.class);
-                                        i.putExtra("name",st.child(arr.get(2)).child("name").getValue(String.class));
-                                        i.putExtra("email",st.child(arr.get(2)).child("email").getValue(String.class));
-                                        i.putExtra("userId",st.child(arr.get(2)).child("userId").getValue(String.class));
+                                        Intent i = new Intent(getApplicationContext(), MapsActivity.class);
+                                        i.putExtra("name", st.child(arr.get(2)).child("name").getValue(String.class));
+                                        i.putExtra("email", st.child(arr.get(2)).child("email").getValue(String.class));
+                                        i.putExtra("userId", st.child(arr.get(2)).child("userId").getValue(String.class));
                                         startActivity(i);
                                     }
                                 });
@@ -155,6 +169,74 @@ Log.d("fghj",st.child(arr.get(0)).child("userId").getValue(String.class));
 
 
     }
+
+    private void getLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+
+        fusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
+            @Override
+            public void onComplete(@NonNull Task<Location> task) {
+                Location location = task.getResult();
+                if (location != null) {
+                    try {
+                        Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+                        List<Address> addresses = geocoder.getFromLocation(
+                                location.getLatitude(), location.getLongitude(), 1
+                        );
+                        insertDataIntoDatabase(addresses.get(0).getLatitude(), addresses.get(0).getLongitude());
+                        Log.d("xdcfvgbhjn", addresses.get(0).getLatitude() + "," + addresses.get(0).getLongitude());
+
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+        });
+
+    }
+
+    private void insertDataIntoDatabase(double latitude, double longitude) {
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+//                    Log.d("dfghjbhb1", String.valueOf(user.getEmail()));
+                    for (DataSnapshot ds1 : snapshot.getChildren()) {
+                        if (ds1.child("email").getValue(String.class).equals(user.getEmail())) {
+
+                            ownId = ds1.child("userId").getValue(String.class);
+                            locRef = FirebaseDatabase.getInstance().getReference().child("Users").child(ownId);
+                            locRef.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    locRef.child("Latitude").setValue((latitude));
+                                    locRef.child("Longitude").setValue((longitude));
+
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -205,10 +287,11 @@ Log.d("fghj",st.child(arr.get(0)).child("userId").getValue(String.class));
 
         }
     }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent i=new Intent(getApplicationContext(),MainActivity.class);
+        Intent i = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(i);
         finish();
     }
