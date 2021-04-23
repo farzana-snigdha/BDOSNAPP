@@ -174,4 +174,11 @@ public class AddFriend extends AppCompatActivity {
 
 
     }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent i=new Intent(getApplicationContext(),MainActivity.class);
+        startActivity(i);
+        finish();
+    }
 }
