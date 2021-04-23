@@ -1,6 +1,13 @@
 <resources>
     <string name="app_name">RESCUE</string>
     <string name="my_text"><u>Back</u></string>
+    <string name="sign_up"><h1><u><b>SIGN UP</b></u></h1></string>
+    <string name="profile"><u><b>PROFILE</b></u></string>
+    <string name="friends"><u><b>FRIENDS</b></u></string> <string name="addMissing"><u><b>Add Information</b></u></string>
+    <string name="viewMissing"><u><b>View Missing Person List</b></u></string>
+
+    <string name="viewMissingProfile"><u><b>Missing Person Profile</b></u></string>
+    <string name="map"><u><b>Current Location</b></u></string>
     <string name="title_activity_maps">Map</string>
     <string name="emergency_contact">Emergency Contact</string>
     <string name="title_activity_maps2">Map</string>

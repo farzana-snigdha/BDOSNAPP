@@ -25,10 +25,10 @@
         android:layout_marginEnd="35dp"
         android:layout_marginBottom="298dp"
         android:backgroundTint="@color/colorPrimary"
-        android:text="Emergency"
-
+        android:text="H E L P !"
         android:textColor="@color/black"
-        android:textSize="30dp" />
+        android:textSize="40dp"
+        android:textStyle="bold" />
 
     <Button
         android:id="@+id/h999"

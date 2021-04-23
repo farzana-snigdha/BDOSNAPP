@@ -29,7 +29,7 @@
         android:layout_height="0dp"
         android:layout_margin="15dp"
         android:paddingLeft="10dp"
-        android:text="Friends"
+        android:text="@string/friends"
         android:textSize="35dp"
         app:layout_constraintBottom_toTopOf="@+id/textViewEm1"
         app:layout_constraintEnd_toEndOf="parent"

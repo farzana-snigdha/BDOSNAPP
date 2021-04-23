@@ -6,6 +6,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,9 +26,10 @@ public class Profile extends AppCompatActivity {
 
     private String TAG = " ";
     //variables for textviews
-    private TextView NameTextView, AgeTextView, EmailTextView, PhoneTextView, codeTV;
-    private TextView EmTextView1, EmTextView2, EmTextView3;
-
+    private TextView NameTextView, AgeTextView, EmailTextView, codeTV;
+    EditText PhoneTextView;
+    private EditText EmTextView1, EmTextView2, EmTextView3;
+Button updateBtn;
     //Firebase Database
     private FirebaseDatabase mFireDatabase;
     private FirebaseAuth mAuth;
@@ -34,6 +38,7 @@ public class Profile extends AppCompatActivity {
     private String userID;
     String ownId;
     FirebaseUser user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +53,7 @@ public class Profile extends AppCompatActivity {
         EmTextView2 = findViewById(R.id.n2);
         EmTextView3 = findViewById(R.id.n3);
         codeTV = findViewById(R.id.code);
+        updateBtn = findViewById(R.id.profile_update);
         //declare database reference object
 
         mAuth = FirebaseAuth.getInstance();
@@ -55,7 +61,7 @@ public class Profile extends AppCompatActivity {
         myRef = mFireDatabase.getReference().child("Users");
         //FirebaseUser user = mAuth.getCurrentUser();
 
-         user = FirebaseAuth.getInstance().getCurrentUser();
+        user = FirebaseAuth.getInstance().getCurrentUser();
         userID = user.getEmail();
         if (user != null) {
             // User is signed in
@@ -69,7 +75,8 @@ public class Profile extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
-                    showData(snapshot);
+                                        showData(snapshot);
+
                 }
             }
 
@@ -78,6 +85,54 @@ public class Profile extends AppCompatActivity {
 
             }
         });
+
+updateBtn.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View view) {
+        updateData();
+        Intent i=new Intent(getApplicationContext(),MainActivity.class);
+        startActivity(i);
+        finish();
+    }
+});
+    }
+    private void updateData() {
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot ds : snapshot.getChildren()) {
+                        if (ds.child("email").getValue(String.class).equals(userID)) {
+                            ownId = ds.child("userId").getValue(String.class);
+                        }
+                    }
+                    userRef = mFireDatabase.getReference().child("Users");
+                    userRef.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot ds) {
+userRef.child(ownId).child("em1").setValue(EmTextView1.getText().toString());
+                            userRef.child(ownId).child("em2").setValue(EmTextView2.getText().toString());
+                            userRef.child(ownId).child("em3").setValue(EmTextView3.getText().toString());
+                            userRef.child(ownId).child("phone").setValue(PhoneTextView.getText().toString());
+
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
 
 
     }
@@ -92,15 +147,16 @@ public class Profile extends AppCompatActivity {
         userRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot ds) {
-                             NameTextView.setText(ds.child(ownId).child("name").getValue(String.class));
-                AgeTextView.setText(ds.child(ownId).child("age").getValue(String.class));
-                EmailTextView.setText(ds.child(ownId).child("email").getValue(String.class));
-                PhoneTextView.setText(ds.child(ownId).child("phone").getValue(String.class));
-                EmTextView1.setText(ds.child(ownId).child("em1").getValue(String.class));
+
+                NameTextView.setText("Name: " + ds.child(ownId).child("name").getValue(String.class));
+                AgeTextView.setText("Age: " + ds.child(ownId).child("age").getValue(String.class));
+                EmailTextView.setText("Email: " + ds.child(ownId).child("email").getValue(String.class));
+                PhoneTextView.setText( ds.child(ownId).child("phone").getValue(String.class));
+                EmTextView1.setText( ds.child(ownId).child("em1").getValue(String.class));
                 EmTextView2.setText(ds.child(ownId).child("em2").getValue(String.class));
-                EmTextView3.setText(ds.child(ownId).child("em3").getValue(String.class));
+                EmTextView3.setText( ds.child(ownId).child("em3").getValue(String.class));
                 String code = String.valueOf(ds.child(ownId).child("code").getValue(Integer.class));
-                codeTV.setText(String.valueOf(code));
+                codeTV.setText("Code: " +String.valueOf(code));
             }
 
             @Override
@@ -162,10 +218,11 @@ public class Profile extends AppCompatActivity {
 
         }
     }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent i=new Intent(getApplicationContext(),MainActivity.class);
+        Intent i = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(i);
         finish();
     }
