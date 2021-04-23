@@ -30,13 +30,13 @@ public class ViewMissingPersonList extends AppCompatActivity {
 
         recview = (RecyclerView) findViewById(R.id.recview);
         recview.setLayoutManager(new LinearLayoutManager(this));
-user=FirebaseAuth.getInstance().getCurrentUser();
+        user = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseRecyclerOptions<MissingPerson> options =
                 new FirebaseRecyclerOptions.Builder<MissingPerson>()
                         .setQuery(FirebaseDatabase.getInstance().getReference().child("MissingPersons"), MissingPerson.class)
                         .build();
 
-        adapter = new MyAdapter(options,getApplicationContext());
+        adapter = new MyAdapter(options, getApplicationContext());
         recview.setAdapter(adapter);
 //        Log.d("snxjsnxjbc",new AddMissingPerson().img);
     }
@@ -52,6 +52,16 @@ user=FirebaseAuth.getInstance().getCurrentUser();
     protected void onStop() {
         super.onStop();
         adapter.stopListening();
+    }
+
+
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent i=new Intent(getApplicationContext(),MainActivity.class);
+        startActivity(i);
+        finish();
     }
 
     @Override
@@ -90,7 +100,8 @@ user=FirebaseAuth.getInstance().getCurrentUser();
                 } else {
                     Intent i31 = new Intent(this, Profile.class);
                     this.startActivity(i31);
-                }                return true;
+                }
+                return true;
             case R.id.map_menu:
                 Intent intent5 = new Intent(this, ViewEmergencyContactList.class);
                 this.startActivity(intent5);
@@ -125,7 +136,7 @@ user=FirebaseAuth.getInstance().getCurrentUser();
                         .setQuery(FirebaseDatabase.getInstance().getReference().child("MissingPersons").orderByChild("location").startAt(s).endAt(s + "\uf8ff"), MissingPerson.class)
                         .build();
 
-        adapter = new MyAdapter(options,getApplicationContext());
+        adapter = new MyAdapter(options, getApplicationContext());
         adapter.startListening();
         recview.setAdapter(adapter);
 

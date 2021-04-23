@@ -75,6 +75,13 @@ public class ViewMissingPersonProfile extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent i=new Intent(getApplicationContext(),ViewMissingPersonList.class);
+        startActivity(i);
+        finish();
+    }
 
     private void setImage(String imageUrl, String imageName, String lastSeen, String location, String age, String height, String relation, String gender, String desc, String contact) {
 

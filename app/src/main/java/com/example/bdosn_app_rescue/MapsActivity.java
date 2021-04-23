@@ -67,6 +67,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         getIncomingIntent();
 
     }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent i=new Intent(getApplicationContext(),ViewEmergencyContactList.class);
+        startActivity(i);
+        finish();
+    }
 
     private void getIncomingIntent() {
         Log.d("pkp", "1234567");

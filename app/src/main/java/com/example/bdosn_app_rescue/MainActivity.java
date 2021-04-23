@@ -79,8 +79,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         auth = FirebaseAuth.getInstance();
-        user = auth.getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference().child("Users");
+        Emn1 = findViewById(R.id.h999);
+        Emn2 = findViewById(R.id.h109);
+        EmBtn = findViewById(R.id.emergency);
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        EmBtn.setBackground(getResources().getDrawable(R.drawable.round_button));
 
         //      Log.d("user1234",auth.getUid());
         if (user == null) {
@@ -89,14 +93,19 @@ public class MainActivity extends AppCompatActivity {
             };
             manager.checkAndRequestPermissions(this);
         } else {
-
         }
 
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        getLocation();
-        Emn1 = findViewById(R.id.h999);
-        Emn2 = findViewById(R.id.h109);
-        EmBtn = findViewById(R.id.emergency);
+        user = auth.getCurrentUser();
+
+        EmBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getLocation();
+                Log.d("kjikhi", "ji");
+
+            }
+        });
+
         Emn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,7 +118,6 @@ public class MainActivity extends AppCompatActivity {
                 makePhoneCall("109");
             }
         });
-
     }
 
     private void makePhoneCall(String number1) {
@@ -159,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
-                    Log.d("dfghjbhb1", String.valueOf(user.getEmail()));
+//                    Log.d("dfghjbhb1", String.valueOf(user.getEmail()));
                     for (DataSnapshot ds1 : snapshot.getChildren()) {
                         if (ds1.child("email").getValue(String.class).equals(user.getEmail())) {
 
@@ -258,12 +266,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        getLocation();
+        //getLocation();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        getLocation();
+        //  getLocation();
     }
 }

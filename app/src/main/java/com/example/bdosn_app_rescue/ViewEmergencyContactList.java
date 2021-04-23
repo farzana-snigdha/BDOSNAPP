@@ -205,4 +205,12 @@ Log.d("fghj",st.child(arr.get(0)).child("userId").getValue(String.class));
 
         }
     }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent i=new Intent(getApplicationContext(),MainActivity.class);
+        startActivity(i);
+        finish();
+    }
+
 }

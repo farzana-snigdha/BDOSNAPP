@@ -20,8 +20,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.karan.churi.PermissionManager.PermissionManager;
 
 import java.util.ArrayList;
@@ -35,7 +38,7 @@ public class SignUp extends AppCompatActivity {
     FirebaseUser user;
     DatabaseReference databaseReference;
     PermissionManager manager;
-
+ArrayList<Integer> arrayList=new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +61,21 @@ public class SignUp extends AppCompatActivity {
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
             finish();
         }
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    for (DataSnapshot ds: snapshot.getChildren()){
+                        arrayList.add(ds.child("code").getValue(Integer.class));
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
         RegBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -72,6 +90,9 @@ public class SignUp extends AppCompatActivity {
 
                 //Generates random number
                 int code = ThreadLocalRandom.current().nextInt(100000, 1000000);
+                if (arrayList.contains(code)){
+                    code=ThreadLocalRandom.current().nextInt(100000, 1000000);
+                }
                 if (TextUtils.isEmpty(email)) {
                     EmailEditText.setError("Email is Required");
                     return;
@@ -111,6 +132,12 @@ public class SignUp extends AppCompatActivity {
         });
 
 
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent i=new Intent(getApplicationContext(),MainActivity.class);
+        startActivity(i);
     }
 
     @Override

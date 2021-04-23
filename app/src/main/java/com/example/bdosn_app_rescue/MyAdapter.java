@@ -31,6 +31,45 @@ public class MyAdapter extends FirebaseRecyclerAdapter<MissingPerson, MyAdapter.
         holder.location.setText("Location : "+ model.getLocation());
         Picasso.get().load(model.getImage()).into(holder.img);
 
+        holder.name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                Intent intent = new Intent(mContext, ViewMissingPersonProfile.class);
+                intent.putExtra("name", (model.getName()));
+                intent.putExtra("location", (model.getLocation()));
+                intent.putExtra("contact", (model.getContact()));
+                intent.putExtra("image", (model.getImage()));
+                mContext.startActivity(intent);
+            }
+        });
+        holder.contact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                Intent intent = new Intent(mContext, ViewMissingPersonProfile.class);
+                intent.putExtra("name", (model.getName()));
+                intent.putExtra("location", (model.getLocation()));
+                intent.putExtra("contact", (model.getContact()));
+                intent.putExtra("image", (model.getImage()));
+                mContext.startActivity(intent);
+            }
+        });
+        holder.location.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                Intent intent = new Intent(mContext, ViewMissingPersonProfile.class);
+                intent.putExtra("name", (model.getName()));
+                intent.putExtra("location", (model.getLocation()));
+                intent.putExtra("contact", (model.getContact()));
+                intent.putExtra("image", (model.getImage()));
+                mContext.startActivity(intent);
+            }
+        });
 
         holder.img.setOnClickListener(new View.OnClickListener() {
             @Override
