@@ -31,6 +31,7 @@ public class ViewMissingPersonProfile extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent1 = new Intent(ViewMissingPersonProfile.this, ViewMissingPersonList.class);
                 ViewMissingPersonProfile.this.startActivity(intent1);
+                finish();
             }
         });
         getIncomingIntent();
@@ -78,7 +79,7 @@ public class ViewMissingPersonProfile extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent i=new Intent(getApplicationContext(),ViewMissingPersonList.class);
+        Intent i = new Intent(getApplicationContext(), ViewMissingPersonList.class);
         startActivity(i);
         finish();
     }

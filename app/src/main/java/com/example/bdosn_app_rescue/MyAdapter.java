@@ -42,6 +42,7 @@ public class MyAdapter extends FirebaseRecyclerAdapter<MissingPerson, MyAdapter.
                 intent.putExtra("contact", (model.getContact()));
                 intent.putExtra("image", (model.getImage()));
                 mContext.startActivity(intent);
+
             }
         });
         holder.contact.setOnClickListener(new View.OnClickListener() {
@@ -68,7 +69,9 @@ public class MyAdapter extends FirebaseRecyclerAdapter<MissingPerson, MyAdapter.
                 intent.putExtra("contact", (model.getContact()));
                 intent.putExtra("image", (model.getImage()));
                 mContext.startActivity(intent);
+
             }
+
         });
 
         holder.img.setOnClickListener(new View.OnClickListener() {

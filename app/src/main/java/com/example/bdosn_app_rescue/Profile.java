@@ -29,7 +29,7 @@ public class Profile extends AppCompatActivity {
     private TextView NameTextView, AgeTextView, EmailTextView, codeTV;
     EditText PhoneTextView;
     private EditText EmTextView1, EmTextView2, EmTextView3;
-Button updateBtn;
+    Button updateBtn;
     //Firebase Database
     private FirebaseDatabase mFireDatabase;
     private FirebaseAuth mAuth;
@@ -75,7 +75,7 @@ Button updateBtn;
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
-                                        showData(snapshot);
+                    showData(snapshot);
 
                 }
             }
@@ -86,16 +86,17 @@ Button updateBtn;
             }
         });
 
-updateBtn.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View view) {
-        updateData();
-        Intent i=new Intent(getApplicationContext(),MainActivity.class);
-        startActivity(i);
-        finish();
+        updateBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                updateData();
+                Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
     }
-});
-    }
+
     private void updateData() {
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -107,14 +108,14 @@ updateBtn.setOnClickListener(new View.OnClickListener() {
                         }
                     }
                     userRef = mFireDatabase.getReference().child("Users");
-                    userRef.addValueEventListener(new ValueEventListener() {
+                    userRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot ds) {
-userRef.child(ownId).child("em1").setValue(EmTextView1.getText().toString());
+                            userRef.child(ownId).child("em1").setValue(EmTextView1.getText().toString());
                             userRef.child(ownId).child("em2").setValue(EmTextView2.getText().toString());
                             userRef.child(ownId).child("em3").setValue(EmTextView3.getText().toString());
                             userRef.child(ownId).child("phone").setValue(PhoneTextView.getText().toString());
-
+finish();
 
                         }
 
@@ -134,7 +135,6 @@ userRef.child(ownId).child("em1").setValue(EmTextView1.getText().toString());
         });
 
 
-
     }
 
     private void showData(DataSnapshot snapshot) {
@@ -151,12 +151,12 @@ userRef.child(ownId).child("em1").setValue(EmTextView1.getText().toString());
                 NameTextView.setText("Name: " + ds.child(ownId).child("name").getValue(String.class));
                 AgeTextView.setText("Age: " + ds.child(ownId).child("age").getValue(String.class));
                 EmailTextView.setText("Email: " + ds.child(ownId).child("email").getValue(String.class));
-                PhoneTextView.setText( ds.child(ownId).child("phone").getValue(String.class));
-                EmTextView1.setText( ds.child(ownId).child("em1").getValue(String.class));
+                PhoneTextView.setText(ds.child(ownId).child("phone").getValue(String.class));
+                EmTextView1.setText(ds.child(ownId).child("em1").getValue(String.class));
                 EmTextView2.setText(ds.child(ownId).child("em2").getValue(String.class));
-                EmTextView3.setText( ds.child(ownId).child("em3").getValue(String.class));
+                EmTextView3.setText(ds.child(ownId).child("em3").getValue(String.class));
                 String code = String.valueOf(ds.child(ownId).child("code").getValue(Integer.class));
-                codeTV.setText("Code: " +String.valueOf(code));
+                codeTV.setText("Code: " + String.valueOf(code));
             }
 
             @Override
@@ -183,15 +183,18 @@ userRef.child(ownId).child("em1").setValue(EmTextView1.getText().toString());
                 if (user == null) {
                     Intent i = new Intent(this, SignUp.class);
                     this.startActivity(i);
+                    finish();
                 } else {
                     Intent i31 = new Intent(this, Profile.class);
                     this.startActivity(i31);
+                    finish();
                 }
                 // Toast.makeText(this, "profile", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.map_menu:
                 Intent i2 = new Intent(this, ViewEmergencyContactList.class);
                 this.startActivity(i2);
+                finish();
                 return true;
             case R.id.add_person_sub_menu:
                 Intent intent1 = new Intent(this, AddMissingPerson.class);

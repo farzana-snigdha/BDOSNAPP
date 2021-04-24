@@ -97,22 +97,27 @@ public class ViewMissingPersonList extends AppCompatActivity {
                 if (user == null) {
                     Intent i = new Intent(this, SignUp.class);
                     this.startActivity(i);
+                    finish();
                 } else {
                     Intent i31 = new Intent(this, Profile.class);
                     this.startActivity(i31);
+                    finish();
                 }
                 return true;
             case R.id.map_menu:
                 Intent intent5 = new Intent(this, ViewEmergencyContactList.class);
                 this.startActivity(intent5);
+                finish();
                 return true;
             case R.id.add_person_sub_menu:
                 Intent intent1 = new Intent(this, AddMissingPerson.class);
                 this.startActivity(intent1);
+                finish();
                 return true;
             case R.id.view_list_sub_menu:
                 Intent intent2 = new Intent(this, ViewMissingPersonList.class);
                 this.startActivity(intent2);
+                finish();
                 return true;
             case R.id.add_friend_sub_menu:
                 Intent intent3 = new Intent(this, AddFriend.class);

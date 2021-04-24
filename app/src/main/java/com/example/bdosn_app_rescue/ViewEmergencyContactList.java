@@ -157,11 +157,17 @@ public class ViewEmergencyContactList extends AppCompatActivity {
                                     @Override
                                     public void onClick(View view) {
                                         Log.d("fghj", st.child(arr.get(0)).child("userId").getValue(String.class));
-                                        Intent i = new Intent(getApplicationContext(), MapsActivity.class);
-                                        i.putExtra("name", st.child(arr.get(0)).child("name").getValue(String.class));
-                                        i.putExtra("email", st.child(arr.get(0)).child("email").getValue(String.class));
-                                        i.putExtra("userId", st.child(arr.get(0)).child("userId").getValue(String.class));
-                                        startActivity(i);
+                                        if (st.child(arr.get(0)).hasChild("Latitude")){
+                                            Intent i = new Intent(getApplicationContext(), MapsActivity.class);
+                                            i.putExtra("name", st.child(arr.get(0)).child("name").getValue(String.class));
+                                            i.putExtra("email", st.child(arr.get(0)).child("email").getValue(String.class));
+                                            i.putExtra("userId", st.child(arr.get(0)).child("userId").getValue(String.class));
+                                            startActivity(i);
+                                        }
+                                        else {
+                                            Toast.makeText(getApplicationContext(),"Location isn't shared with you",Toast.LENGTH_SHORT).show();
+                                        }
+
                                     }
                                 });
                                 e2.setOnClickListener(new View.OnClickListener() {
@@ -317,19 +323,23 @@ public class ViewEmergencyContactList extends AppCompatActivity {
                 if (user == null) {
                     Intent i = new Intent(this, SignUp.class);
                     this.startActivity(i);
+                    finish();
                 } else {
                     Intent i31 = new Intent(this, Profile.class);
                     this.startActivity(i31);
+                    finish();
                 }
                 // Toast.makeText(this, "profile", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.map_menu:
                 Intent i2 = new Intent(this, ViewEmergencyContactList.class);
                 this.startActivity(i2);
+                finish();
                 return true;
             case R.id.add_person_sub_menu:
                 Intent intent1 = new Intent(this, AddMissingPerson.class);
                 this.startActivity(intent1);
+                finish();
                 finish();
                 return true;
             case R.id.view_list_sub_menu:

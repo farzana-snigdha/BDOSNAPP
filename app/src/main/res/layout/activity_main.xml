@@ -9,10 +9,12 @@
     android:orientation="horizontal"
     android:paddingLeft="12dp"
     android:paddingTop="12dp"
-    android:paddingRight="12dp">
+    android:paddingRight="12dp"
+    >
 
 
     <Button
+        android:background="@drawable/round_button"
         android:id="@+id/emergency"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -21,11 +23,11 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="106dp"
-        android:layout_marginBottom="119dp"
         android:layout_marginStart="33dp"
+        android:layout_marginTop="106dp"
         android:layout_marginEnd="33dp"
-        android:text="H E L P !"
+        android:layout_marginBottom="119dp"
+        android:backgroundTint="@color/colorAccent" android:text="H E L P !"
         android:textColor="@color/black"
         android:textSize="40dp"
         android:textStyle="bold"
@@ -40,16 +42,16 @@
         android:layout_height="85dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
+        android:layout_marginStart="67dp"
         android:layout_marginEnd="39dp"
         android:layout_marginBottom="134dp"
-        android:backgroundTint="#ff9966"
+        android:backgroundTint="@color/colorPrimary"
         android:text="999"
         android:textColor="@color/black"
         android:textSize="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/h109"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginStart="67dp"/>
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/h109"
@@ -58,12 +60,11 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="67dp"
-        android:backgroundTint="#ff9966"
+        android:backgroundTint="@color/colorPrimary"
         android:text=" 109"
         android:textColor="@color/black"
         android:textSize="30dp"
         app:layout_constraintBaseline_toBaselineOf="@+id/h999"
-        app:layout_constraintEnd_toEndOf="parent"
-    />
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -214,9 +214,11 @@ public class AddMissingPerson extends AppCompatActivity {
                 if (user == null) {
                     Intent i = new Intent(this, SignUp.class);
                     this.startActivity(i);
+                    finish();
                 } else {
                     Intent i31 = new Intent(this, Profile.class);
                     this.startActivity(i31);
+                    finish();
                 }
                 return true;
             case R.id.map_menu:
@@ -321,6 +323,7 @@ public class AddMissingPerson extends AppCompatActivity {
 
                                                               Intent intent3 = new Intent(AddMissingPerson.this, MainActivity.class);
                                                               AddMissingPerson.this.startActivity(intent3);
+                                                              finish();
 //                                name.setText("");
 //                                age.setText("");
 //                                height.setText("");

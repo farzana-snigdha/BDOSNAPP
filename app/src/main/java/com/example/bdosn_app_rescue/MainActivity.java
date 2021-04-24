@@ -27,6 +27,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -64,8 +65,8 @@ public class MainActivity extends AppCompatActivity {
     FirebaseUser user;
     PermissionManager manager;
     FusedLocationProviderClient fusedLocationProviderClient;
-    DatabaseReference reference, circleRef;
-    String ownId;
+    DatabaseReference reference, circleRef,ref;
+    String ownId,ownId1;
     private static final int REQUEST_CALL = 1;
     Button EmBtn;
     Button Emn1;
@@ -93,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         EmBtn.setBackground(getResources().getDrawable(R.drawable.round_button));
         //      Log.d("user1234",auth.getUid());
+        user = auth.getCurrentUser();
         if (user == null) {
 
             manager = new PermissionManager() {
@@ -102,7 +104,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
         }
 
-        user = auth.getCurrentUser();
 
         EmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -264,8 +265,8 @@ public class MainActivity extends AppCompatActivity {
                                 location.getLatitude(), location.getLongitude(), 1
                         );
                         insertDataIntoDatabase(addresses.get(0).getLatitude(), addresses.get(0).getLongitude());
+                        smsService();
                         Log.d("xdcfvgbhjn", addresses.get(0).getLatitude() + "," + addresses.get(0).getLongitude());
-
 
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -275,6 +276,95 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void smsService() {
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+//                    Log.d("dfghjbhb1", String.valueOf(user.getEmail()));
+                    for (DataSnapshot ds1 : snapshot.getChildren()) {
+                        if (ds1.child("email").getValue(String.class).equals(user.getEmail())) {
+
+                            ownId = ds1.child("userId").getValue(String.class);
+                            ref = FirebaseDatabase.getInstance().getReference().child("Users").child(ownId);
+                            ref.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    String num1 = "88"+snapshot.child("em1").getValue(String.class);
+                                    String num2 = "88"+snapshot.child("em2").getValue(String.class);
+                                    String num3 = "88"+snapshot.child("em3").getValue(String.class);
+                                    String name=snapshot.child("name").getValue(String.class);
+                                    String message=name+" is in danger.";
+
+                                    SmsManager smsManager = SmsManager.getDefault();
+                    smsManager.sendTextMessage(num1, null, message, null, null);
+                    SmsManager smsManager2 = SmsManager.getDefault();
+                    smsManager2.sendTextMessage(num2, null, message, null, null);
+                    SmsManager smsManager3 = SmsManager.getDefault();
+                    smsManager3.sendTextMessage(num3, null, message, null, null);
+                                    Log.d("sqx",num1);
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
+
+//        Query checkUser = reference.orderByChild("email").equalTo(username);
+        // ds1.child("email").getValue(String.class).equals(user.getEmail())
+        // reference = FirebaseDatabase.getInstance().getReference().child("Users");
+//        checkUser.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                if (snapshot.exists()) {
+//
+
+//                    String phoneNumber = "88" + eContact1FromDB;
+//                    String eContact2FromDB = snapshot.child(username).child("em2").getValue(String.class);
+//                    String phoneNumber2 = "88" + eContact2FromDB;
+//                    String eContact3FromDB = snapshot.child(username).child("em3").getValue(String.class);
+//                    String phoneNumber3 = "88" + eContact3FromDB;
+//
+//                    String dangerMessage = "**User is in DANGER**\n";
+//                    String link = "\nLink = https://www.google.com/maps/search/?api=1&query=" + addresses.get(0).getLatitude() +
+//                            "," + addresses.get(0).getLongitude();
+//                    String message = dangerMessage + "Address = " + addresses.get(0).getAddressLine(0) +
+//                            "\nLocality = " + addresses.get(0).getLocality() +
+//                            "\nCountry = " + addresses.get(0).getCountryName() +
+//                            "\nLatitude = " + addresses.get(0).getLatitude() +
+//                            "\nLongitude = " + addresses.get(0).getLongitude() + link;
+//                    SmsManager smsManager = SmsManager.getDefault();
+//                    smsManager.sendTextMessage(phoneNumber, null, message, null, null);
+//                    SmsManager smsManager2 = SmsManager.getDefault();
+//                    smsManager2.sendTextMessage(phoneNumber2, null, message, null, null);
+//                    SmsManager smsManager3 = SmsManager.getDefault();
+//                    smsManager3.sendTextMessage(phoneNumber3, null, message, null, null);
+//                } else {
+//
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
     }
 
     private void insertDataIntoDatabase(double latitude, double longitude) {
@@ -341,19 +431,23 @@ public class MainActivity extends AppCompatActivity {
                 if (user == null) {
                     Intent i = new Intent(this, SignUp.class);
                     this.startActivity(i);
+                    finish();
                 } else {
                     Intent i31 = new Intent(this, Profile.class);
                     this.startActivity(i31);
+                    finish();
                 }
                 // Toast.makeText(this, "profile", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.map_menu:
                 Intent i2 = new Intent(this, ViewEmergencyContactList.class);
                 this.startActivity(i2);
+                finish();
                 return true;
             case R.id.add_person_sub_menu:
                 Intent intent1 = new Intent(this, AddMissingPerson.class);
                 this.startActivity(intent1);
+
                 finish();
                 return true;
             case R.id.view_list_sub_menu:

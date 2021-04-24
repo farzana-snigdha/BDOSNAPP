@@ -112,6 +112,7 @@ public class SignUp extends AppCompatActivity {
                             manager = new PermissionManager() {
                             };
                             manager.checkAndRequestPermissions(SignUp.this);
+                            Toast.makeText(getApplicationContext(), "User info added", Toast.LENGTH_SHORT).show();
 
                         } else {
                             // Toast.makeText(com.example.bdosn_app.SignUp.this,"Error !"+task.getException().getMessage(),Toast.LENGTH_SHORT).show();
@@ -126,9 +127,8 @@ public class SignUp extends AppCompatActivity {
                         // Log.d("1234567",fAuth.getUid());
                         root.child(key).setValue(user);
 
-                        Toast.makeText(getApplicationContext(), "User info added", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(getApplicationContext(), MainActivity.class));
-
+finish();
 
             }
 
@@ -142,6 +142,7 @@ public class SignUp extends AppCompatActivity {
         super.onBackPressed();
         Intent i = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(i);
+        finish();
     }
 
     @Override
@@ -168,15 +169,19 @@ public class SignUp extends AppCompatActivity {
                 if (user == null) {
                     Intent i = new Intent(this, SignUp.class);
                     this.startActivity(i);
+                    finish();
                 } else {
                     Intent i31 = new Intent(this, Profile.class);
                     this.startActivity(i31);
+                    finish();
+
                 }
                 // Toast.makeText(this, "profile", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.map_menu:
                 Intent i2 = new Intent(this, ViewEmergencyContactList.class);
                 this.startActivity(i2);
+                finish();
                 return true;
             case R.id.add_person_sub_menu:
                 Intent intent1 = new Intent(this, AddMissingPerson.class);

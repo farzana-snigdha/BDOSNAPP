@@ -56,6 +56,7 @@ public class AddFriend extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent3 = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent3);
+                finish();
             }
         });
         submitBtn.setOnClickListener(new View.OnClickListener() {
