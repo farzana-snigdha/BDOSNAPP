@@ -88,7 +88,40 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             DatabaseReference reference = database.getReference().child("Users");
+if (user.getEmail().equals(email)){
+    reference.addValueEventListener(new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot snapshot) {
+            if (snapshot.exists()) {
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    Log.d("gcfcf", ds.child("userId").getValue(String.class));
+                    if (ds.child("userId").getValue(String.class).equals(userId)) {
+                        lat = ds.child("latitude").getValue(double.class);
+                        longi = ds.child("longitude").getValue(double.class);
 
+                        {
+                            mMap.clear();
+                            // Add a marker in Sydney and move the camera
+                            LatLng sydney = new LatLng(lat, longi);
+                            mMap.addMarker(new MarkerOptions().position(sydney).title("Location Of " + ds.child("name").getValue(String.class)));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 15f));
+                        }
+
+                    } else {
+                        //  Toast.makeText(getApplicationContext(),"Couldn't Get The Location",Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        }
+
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError error) {
+
+        }
+    });
+
+}else{
             reference.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -122,7 +155,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             });
             Log.d("njni", lat + "  " + longi);
 
-        }
+        }}
     }
 
 

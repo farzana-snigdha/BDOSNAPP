@@ -255,6 +255,7 @@
         android:layout_toRightOf="@id/contact_label"
         android:hint="Contact Number"
         android:textSize="12dp"
+
         />
 
     <Button

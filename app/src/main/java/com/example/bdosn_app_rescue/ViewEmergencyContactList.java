@@ -283,8 +283,8 @@ public class ViewEmergencyContactList extends AppCompatActivity {
                             locRef.addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    locRef.child("Latitude").setValue((latitude));
-                                    locRef.child("Longitude").setValue((longitude));
+                                    locRef.child("latitude").setValue((latitude));
+                                    locRef.child("longitude").setValue((longitude));
 
                                 }
 

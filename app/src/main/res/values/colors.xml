@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
     <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#ff9966</color>
-    <color name="purple_700">#ff5e62</color>
+    <color name="purple_500">#FF5722</color>
+    <color name="purple_700">#DA000000</color>
     <color name="teal_200">#F88A66</color>
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="headbar">#ff9966</color>
+    <color name="headbar">#FF7700</color>
     <color name="colorPrimary">#ff9966</color>
     <color name="colorPrimaryDark">#ff5e62</color>
-    <color name="colorAccent">#F65656</color>
+    <color name="colorAccent">#FF5722</color>
 
 
 

@@ -97,7 +97,7 @@ FirebaseAuth auth;
                                     String num2 = "88"+snapshot.child("em2").getValue(String.class);
                                     String num3 = "88"+snapshot.child("em3").getValue(String.class);
                                     int cod=snapshot.child("code").getValue(int.class);
-                                    String message="Hey! Add me in RESCUE.\n My code is: "+String.valueOf(cod);
+                                    String message="Hey! Add me in RESCUE.\nMy code is: "+String.valueOf(cod);
 
                                     SmsManager smsManager = SmsManager.getDefault();
                                     smsManager.sendTextMessage(num1, null, message, null, null);

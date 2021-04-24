@@ -123,7 +123,7 @@ public class SignUp extends AppCompatActivity {
 
                         //Saves data into Database
                         String key = databaseReference.push().getKey();
-                        CreateUser user = new CreateUser(name, age, email, phone, password, em1, em2, em3, code, false, "k", "k", key);
+                        CreateUser user = new CreateUser(name, age, email, phone, password, em1, em2, em3, code, false, 0.0,0.0, key);
                         // Log.d("1234567",fAuth.getUid());
                         root.child(key).setValue(user);
 

@@ -11,11 +11,11 @@ public class CreateUser {
     private String em3;
     private int code;
     private boolean isSharing;
-    private String Latitude;
-    private String Longitude;
+    private double Latitude;
+    private double Longitude;
     private String userId;
 
-    public CreateUser(String name, String age, String email, String phone, String password, String em1, String em2, String em3,  int code, boolean isSharing, String latitude, String longitude,String userId) {
+    public CreateUser(String name, String age, String email, String phone, String password, String em1, String em2, String em3,  int code, boolean isSharing, double latitude, double longitude,String userId) {
         this.name = name;
         this.age = age;
         this.email = email;
@@ -82,11 +82,11 @@ public class CreateUser {
         return isSharing;
     }
 
-    public String getLatitude() {
+    public double getLatitude() {
         return Latitude;
     }
 
-    public String getLongitude() {
+    public double getLongitude() {
         return Longitude;
     }
     //Setter
@@ -132,11 +132,11 @@ public class CreateUser {
         isSharing = sharing;
     }
 
-    public void setLatitude(String latitude) {
+    public void setLatitude(double latitude) {
         Latitude = latitude;
     }
 
-    public void setLongitude(String longitude) {
+    public void setLongitude(double longitude) {
         Longitude = longitude;
     }
 

@@ -60,6 +60,7 @@
         android:padding="15dp"
         android:text="Your Phone Number"
         android:textColor="@color/black"
+        android:inputType="number"
         android:textSize="22sp" />
 
     <TextView
@@ -97,6 +98,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1.0"
         android:padding="15dp"
+        android:inputType="number"
         android:textColor="@color/black"
         android:textSize="20sp" />
 
@@ -105,12 +107,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1.0"
+        android:inputType="number"
         android:padding="15dp"
         android:textColor="@color/black"
         android:textSize="20sp" />
 
     <EditText
         android:id="@+id/n3"
+        android:inputType="number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1.0"
