@@ -49,7 +49,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     FirebaseUser user;
     double lat, longi;
     String ownId;
-    public static int distance=10;
+    public static int distance = 10;
 
 
     @Override
@@ -67,10 +67,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         getIncomingIntent();
 
     }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent i=new Intent(getApplicationContext(),ViewEmergencyContactList.class);
+        Intent i = new Intent(getApplicationContext(), ViewEmergencyContactList.class);
         startActivity(i);
         finish();
     }
@@ -82,7 +83,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             String email = getIntent().getStringExtra("email");
             String name = getIntent().getStringExtra("name");
             String userId = getIntent().getStringExtra("userId");
-            Log.d("gcfyugugygygcf",userId);
+            Log.d("gcfyugugygygcf", userId);
 
 
             FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -93,21 +94,21 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.exists()) {
                         for (DataSnapshot ds : snapshot.getChildren()) {
-                            Log.d("gcfcf",ds.child("userId").getValue(String.class));
-                            if (ds.child("userId").getValue(String.class).equals(userId) ) {
+                            Log.d("gcfcf", ds.child("userId").getValue(String.class));
+                            if (ds.child("userId").getValue(String.class).equals(userId)) {
                                 lat = ds.child("Latitude").getValue(double.class);
                                 longi = ds.child("Longitude").getValue(double.class);
 
                                 {
+                                    mMap.clear();
                                     // Add a marker in Sydney and move the camera
                                     LatLng sydney = new LatLng(lat, longi);
-                                    mMap.addMarker(new MarkerOptions().position(sydney).title("Location Of "+ds.child("name").getValue(String.class)));
-                                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney,15f));
+                                    mMap.addMarker(new MarkerOptions().position(sydney).title("Location Of " + ds.child("name").getValue(String.class)));
+                                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 15f));
                                 }
 
-                            }
-                            else {
-                              //  Toast.makeText(getApplicationContext(),"Couldn't Get The Location",Toast.LENGTH_SHORT).show();
+                            } else {
+                                //  Toast.makeText(getApplicationContext(),"Couldn't Get The Location",Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
@@ -164,8 +165,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -185,7 +184,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 } else {
                     Intent i31 = new Intent(this, Profile.class);
                     this.startActivity(i31);
-                }                return true;
+                }
+                return true;
             case R.id.map_menu:
 
                 Intent i = new Intent(this, ViewEmergencyContactList.class);
@@ -227,6 +227,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         client.connect();
 
     }
+
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         request = new LocationRequest().create();
@@ -244,7 +245,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onConnectionSuspended(int i) {
-client.connect();
+        client.connect();
     }
 
     @Override

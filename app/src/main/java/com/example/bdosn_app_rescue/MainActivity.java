@@ -7,14 +7,21 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.telephony.SmsManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -85,7 +92,6 @@ public class MainActivity extends AppCompatActivity {
         EmBtn = findViewById(R.id.emergency);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         EmBtn.setBackground(getResources().getDrawable(R.drawable.round_button));
-
         //      Log.d("user1234",auth.getUid());
         if (user == null) {
 
@@ -101,9 +107,44 @@ public class MainActivity extends AppCompatActivity {
         EmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getLocation();
-                Log.d("kjikhi", "ji");
+                if (isLocationEnabled(getApplicationContext()))
+                {
+                    getLocation();
+                    Log.d("kjikhi", "ji");
 
+                }
+                else {
+                    AlertDialog.Builder builder
+                            = new AlertDialog
+                            .Builder(MainActivity.this);
+
+                    builder.setMessage("Turn On Your Location");
+
+                    builder.setTitle("Location Alert !");
+
+                    builder.setCancelable(false);
+                    builder.setNegativeButton(
+                            "OK",
+                            new DialogInterface
+                                    .OnClickListener() {
+
+                                @Override
+                                public void onClick(DialogInterface dialog,
+                                                    int which) {
+                                    dialog.cancel();
+                                }
+                            });
+
+                    // Create the Alert dialog
+                    AlertDialog alertDialog = builder.create();
+
+                    // Show the Alert Dialog box
+                    alertDialog.show();
+
+                    Log.d("xnsxn", "xnjwbnx")
+
+                    ;
+                }
             }
         });
 
@@ -121,6 +162,29 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    public static boolean isLocationEnabled(Context context) {
+        int locationMode = 0;
+        String locationProviders;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            try {
+                locationMode = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
+
+            } catch (Settings.SettingNotFoundException e) {
+                e.printStackTrace();
+                return false;
+            }
+
+            return locationMode != Settings.Secure.LOCATION_MODE_OFF;
+
+        } else {
+            locationProviders = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+            return !TextUtils.isEmpty(locationProviders);
+        }
+
+
+    }
+
     private void makePhoneCall(String number1) {
         number = number1;
 
@@ -132,6 +196,56 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial)));
         }
 
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        AlertDialog.Builder builder
+                = new AlertDialog
+                .Builder(MainActivity.this);
+
+        builder.setMessage("Do you want to exit ?");
+
+        builder.setTitle("Alert !");
+
+        builder.setCancelable(false);
+
+
+        builder
+                .setPositiveButton(
+                        "Yes",
+                        new DialogInterface
+                                .OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog,
+                                                int which) {
+
+                                // When the user click yes button
+                                // then app will close
+                                finish();
+                            }
+                        });
+
+
+        builder.setNegativeButton(
+                "No",
+                new DialogInterface
+                        .OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog,
+                                        int which) {
+                  dialog.cancel();
+                    }
+                });
+
+        // Create the Alert dialog
+        AlertDialog alertDialog = builder.create();
+
+        // Show the Alert Dialog box
+        alertDialog.show();
     }
 
     private void getLocation() {

@@ -38,7 +38,8 @@ public class SignUp extends AppCompatActivity {
     FirebaseUser user;
     DatabaseReference databaseReference;
     PermissionManager manager;
-ArrayList<Integer> arrayList=new ArrayList<>();
+    ArrayList<Integer> arrayList = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,8 +65,8 @@ ArrayList<Integer> arrayList=new ArrayList<>();
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()){
-                    for (DataSnapshot ds: snapshot.getChildren()){
+                if (snapshot.exists()) {
+                    for (DataSnapshot ds : snapshot.getChildren()) {
                         arrayList.add(ds.child("code").getValue(Integer.class));
                     }
                 }
@@ -90,8 +91,8 @@ ArrayList<Integer> arrayList=new ArrayList<>();
 
                 //Generates random number
                 int code = ThreadLocalRandom.current().nextInt(100000, 1000000);
-                if (arrayList.contains(code)){
-                    code=ThreadLocalRandom.current().nextInt(100000, 1000000);
+                if (arrayList.contains(code)) {
+                    code = ThreadLocalRandom.current().nextInt(100000, 1000000);
                 }
                 if (TextUtils.isEmpty(email)) {
                     EmailEditText.setError("Email is Required");
@@ -111,7 +112,6 @@ ArrayList<Integer> arrayList=new ArrayList<>();
                             manager = new PermissionManager() {
                             };
                             manager.checkAndRequestPermissions(SignUp.this);
-                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
 
                         } else {
                             // Toast.makeText(com.example.bdosn_app.SignUp.this,"Error !"+task.getException().getMessage(),Toast.LENGTH_SHORT).show();
@@ -119,13 +119,16 @@ ArrayList<Integer> arrayList=new ArrayList<>();
                     }
                 });
 
-                //Saves data into Database
-                String key = databaseReference.push().getKey();
-                CreateUser user = new CreateUser(name, age, email, phone, password, em1, em2, em3, code, false, "k", "k", key);
-                // Log.d("1234567",fAuth.getUid());
-                root.child(key).setValue(user);
 
-                Toast.makeText(getApplicationContext(), "User info added", Toast.LENGTH_SHORT).show();
+                        //Saves data into Database
+                        String key = databaseReference.push().getKey();
+                        CreateUser user = new CreateUser(name, age, email, phone, password, em1, em2, em3, code, false, "k", "k", key);
+                        // Log.d("1234567",fAuth.getUid());
+                        root.child(key).setValue(user);
+
+                        Toast.makeText(getApplicationContext(), "User info added", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+
 
             }
 
@@ -133,10 +136,11 @@ ArrayList<Integer> arrayList=new ArrayList<>();
 
 
     }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent i=new Intent(getApplicationContext(),MainActivity.class);
+        Intent i = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(i);
     }
 
@@ -148,6 +152,7 @@ ArrayList<Integer> arrayList=new ArrayList<>();
 
         }
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();

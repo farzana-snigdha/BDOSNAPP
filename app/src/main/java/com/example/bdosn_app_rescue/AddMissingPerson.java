@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -63,14 +64,16 @@ public class AddMissingPerson extends AppCompatActivity {
     private RequestQueue requestQueue;
     private String url = "https://fcm.googleapis.com/fcm/send";
     public String img;
-FirebaseUser user;
+    FirebaseUser user;
+    int fl = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_missing_person);
         missingPhoto = findViewById(R.id.missing_photo);
         confirm = findViewById(R.id.confirm_button);
-user= FirebaseAuth.getInstance().getCurrentUser();
+        user = FirebaseAuth.getInstance().getCurrentUser();
         name = (EditText) findViewById(R.id.missing_name_text);
         location = (EditText) findViewById(R.id.missing_location_text);
         age = (EditText) findViewById(R.id.age_text);
@@ -109,7 +112,7 @@ user= FirebaseAuth.getInstance().getCurrentUser();
             @Override
             public void onClick(View view) {
                 uploadInformation();
-               // sendNotification();
+                // sendNotification();
             }
         });
     }
@@ -214,13 +217,14 @@ user= FirebaseAuth.getInstance().getCurrentUser();
                 } else {
                     Intent i31 = new Intent(this, Profile.class);
                     this.startActivity(i31);
-                }                return true;
+                }
+                return true;
             case R.id.map_menu:
                 Intent i = new Intent(this, ViewEmergencyContactList.class);
                 this.startActivity(i);
                 finish();
                 // startActivity();
-               // Toast.makeText(this, "current location", Toast.LENGTH_SHORT).show();
+                // Toast.makeText(this, "current location", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.add_person_sub_menu:
                 Intent intent1 = new Intent(this, AddMissingPerson.class);
@@ -248,10 +252,11 @@ user= FirebaseAuth.getInstance().getCurrentUser();
         }
 
     }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent i=new Intent(getApplicationContext(),MainActivity.class);
+        Intent i = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(i);
         finish();
     }
@@ -268,6 +273,7 @@ user= FirebaseAuth.getInstance().getCurrentUser();
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null) {
             imageUri = data.getData();
+            fl = 2;
             try {
                 InputStream inputStream = getContentResolver().openInputStream(imageUri);
                 bitmap = BitmapFactory.decodeStream(inputStream);
@@ -283,33 +289,38 @@ user= FirebaseAuth.getInstance().getCurrentUser();
         final String randomKey = UUID.randomUUID().toString();
         storage = FirebaseStorage.getInstance();
         StorageReference riversRef = storage.getReference("image" + randomKey);
-
         final ProgressDialog pd = new ProgressDialog(this);
         pd.setTitle("Uploading Information...");
         pd.show();
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         DatabaseReference root = db.getReference("MissingPersons");
-        riversRef.putFile(imageUri)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        riversRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                String fAge, fContact, fDesc, fLoc, fGender, fHeight, fLastSeen, fName, fRelation, fImg;
+        if (fl == 2) {
+            if (!(TextUtils.isEmpty(location.getText().toString().trim())
+                    || TextUtils.isEmpty(description.getText().toString().trim())
+                    || TextUtils.isEmpty(contact.getText().toString().trim()) ||
+                    TextUtils.isEmpty(lastSeen.getText().toString().trim()) || TextUtils.isEmpty(name.getText().toString().trim()))) {
 
-                                pd.dismiss();
+                riversRef.putFile(imageUri)
+                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                                  @Override
+                                                  public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                                      riversRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                          @Override
+                                                          public void onSuccess(Uri uri) {
+                                                              String fAge, fContact, fDesc, fLoc, fGender, fHeight, fLastSeen, fName, fRelation, fImg;
 
-                                MissingPerson missingPerson = new MissingPerson(age.getText().toString().trim(), contact.getText().toString(),
-                                        description.getText().toString(), gender.getText().toString(), height.getText().toString(),
-                                        uri.toString(), lastSeen.getText().toString(), location.getText().toString(), name.getText().toString(),
-                                        relation.getText().toString());
-                                root.child(String.valueOf((maxid + 1) * (-1))).setValue(missingPerson);
+                                                              pd.dismiss();
+
+                                                              MissingPerson missingPerson = new MissingPerson(age.getText().toString().trim(), contact.getText().toString(),
+                                                                      description.getText().toString(), gender.getText().toString(), height.getText().toString(),
+                                                                      uri.toString(), lastSeen.getText().toString(), location.getText().toString(), name.getText().toString(),
+                                                                      relation.getText().toString());
+                                                              root.child(String.valueOf((maxid + 1) * (-1))).setValue(missingPerson);
 //                                root.child(contact.getText().toString()+new Random().nextInt(1200)).setValue(missingPerson);
-                                Toast.makeText(AddMissingPerson.this, "Uploaded Successfully", Toast.LENGTH_SHORT).show();
+                                                              Toast.makeText(AddMissingPerson.this, "Uploaded Successfully", Toast.LENGTH_SHORT).show();
 
-                                Intent intent3 = new Intent(AddMissingPerson.this, MainActivity.class);
-                                AddMissingPerson.this.startActivity(intent3);
+                                                              Intent intent3 = new Intent(AddMissingPerson.this, MainActivity.class);
+                                                              AddMissingPerson.this.startActivity(intent3);
 //                                name.setText("");
 //                                age.setText("");
 //                                height.setText("");
@@ -320,27 +331,37 @@ user= FirebaseAuth.getInstance().getCurrentUser();
 //                                description.setText("");
 //                                contact.setText("");
 //                                missingPhoto.setImageResource(R.drawable.ic_person);
-                                sendNotification();
+                                                              sendNotification();
 
+
+                                                          }
+                                                      });
+
+                                                  }
+                                              }
+                        )
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception exception) {
+                                pd.dismiss();
+                                Toast.makeText(getApplicationContext(), "Failed to Upload", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
+                                double progressPercent = (100.00 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+                                pd.setMessage("Progress: " + (int) progressPercent + "%");
                             }
                         });
+            } else {
+                pd.dismiss();
+                Toast.makeText(AddMissingPerson.this, "Add all the Information", Toast.LENGTH_SHORT).show();
 
-                    }
-                }
-)
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        pd.dismiss();
-                        Toast.makeText(getApplicationContext(), "Failed to Upload", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
-                        double progressPercent = (100.00 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
-                        pd.setMessage("Progress: " + (int) progressPercent + "%");
-                    }
-                });
+            }
+        } else {
+            pd.dismiss();
+            Toast.makeText(getApplicationContext(), "Please select a picture", Toast.LENGTH_SHORT).show();
+        }
     }
 }

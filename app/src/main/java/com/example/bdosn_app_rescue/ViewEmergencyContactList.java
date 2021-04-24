@@ -5,12 +5,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -42,7 +48,7 @@ public class ViewEmergencyContactList extends AppCompatActivity {
     long maxid = 0;
     FirebaseUser user;
     FirebaseAuth auth;
-    DatabaseReference reference, circleRef,locRef;
+    DatabaseReference reference, circleRef, locRef;
     String ownId;
     String userID;
     ArrayList<String> arr = new ArrayList<>(Arrays.asList(" ", " ", " ", " "));
@@ -83,12 +89,48 @@ public class ViewEmergencyContactList extends AppCompatActivity {
                             loc.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    getLocation();
-                                    Intent i = new Intent(getApplicationContext(), MapsActivity.class);
-                                    i.putExtra("name", ds1.child("name").getValue(String.class));
-                                    i.putExtra("email", ds1.child("email").getValue(String.class));
-                                    i.putExtra("userId", ds1.child("userId").getValue(String.class));
-                                    startActivity(i);
+                                    if (isLocationEnabled(getApplicationContext())) {
+                                        getLocation();
+                                        Intent i = new Intent(getApplicationContext(), MapsActivity.class);
+                                        i.putExtra("name", ds1.child("name").getValue(String.class));
+                                        i.putExtra("email", ds1.child("email").getValue(String.class));
+                                        i.putExtra("userId", ds1.child("userId").getValue(String.class));
+                                        startActivity(i);
+                                        Log.d("kjikhi", "ji");
+
+                                    } else {
+                                        AlertDialog.Builder builder
+                                                = new AlertDialog
+                                                .Builder(ViewEmergencyContactList.this);
+
+                                        builder.setMessage("Turn On Your Location");
+
+                                        builder.setTitle("Location Alert !");
+
+                                        builder.setCancelable(false);
+                                        builder.setNegativeButton(
+                                                "OK",
+                                                new DialogInterface
+                                                        .OnClickListener() {
+
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog,
+                                                                        int which) {
+                                                        dialog.cancel();
+                                                    }
+                                                });
+
+                                        // Create the Alert dialog
+                                        AlertDialog alertDialog = builder.create();
+
+                                        // Show the Alert Dialog box
+                                        alertDialog.show();
+
+                                        Log.d("xnsxn", "xnjwbnx")
+
+                                        ;
+                                    }
+
                                 }
                             });
                         }
@@ -169,6 +211,29 @@ public class ViewEmergencyContactList extends AppCompatActivity {
 
 
     }
+    public static boolean isLocationEnabled(Context context) {
+        int locationMode = 0;
+        String locationProviders;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            try {
+                locationMode = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
+
+            } catch (Settings.SettingNotFoundException e) {
+                e.printStackTrace();
+                return false;
+            }
+
+            return locationMode != Settings.Secure.LOCATION_MODE_OFF;
+
+        } else {
+            locationProviders = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+            return !TextUtils.isEmpty(locationProviders);
+        }
+
+
+    }
+
 
     private void getLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
