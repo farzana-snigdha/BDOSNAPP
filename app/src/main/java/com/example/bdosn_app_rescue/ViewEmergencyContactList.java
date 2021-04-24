@@ -156,7 +156,6 @@ public class ViewEmergencyContactList extends AppCompatActivity {
                                 e1.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        Log.d("fghj", st.child(arr.get(0)).child("userId").getValue(String.class));
                                         if (st.child(arr.get(0)).hasChild("Latitude")){
                                             Intent i = new Intent(getApplicationContext(), MapsActivity.class);
                                             i.putExtra("name", st.child(arr.get(0)).child("name").getValue(String.class));
