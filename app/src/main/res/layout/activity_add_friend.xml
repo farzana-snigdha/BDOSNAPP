@@ -5,9 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="20dp"
-    tools:context=".AddFriend">
+    tools:context=".AddFriend"
+    android:background="@color/bg">
 
     <TextView
+        android:textColor="@color/white"
         android:id="@+id/text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -51,6 +53,8 @@
         android:layout_marginTop="25dp"
       android:layout_centerHorizontal="true"
         android:gravity="center"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
         android:layout_below="@id/submit_code_btn"
         />
 

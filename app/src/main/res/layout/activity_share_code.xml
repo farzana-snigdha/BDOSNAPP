@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:paddingLeft="16dp"
+    android:background="@color/bg"
     android:paddingRight="16dp"
     tools:context=".ShareCode">
 
@@ -20,11 +21,12 @@
         android:textSize="40dp"
 android:textAllCaps="true"
         android:textStyle="bold"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:layout_marginBottom="20dp"/>
 
     <TextView
         android:id="@+id/textView2"
+        android:textColor="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Share Your Code With Your          Emergency Contacts"
@@ -52,6 +54,7 @@ android:textAllCaps="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/my_text"
+        android:textColor="@color/headbar"
         android:layout_marginTop="25dp"
         android:textSize="20dp"
         android:layout_gravity="center"

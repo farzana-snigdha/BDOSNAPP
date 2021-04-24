@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/login_background"
-    tools:context=".SignUp">
+    tools:context=".SignUp"
+    android:backgroundTint="@color/bg">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -92,11 +93,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Enter Three Emergency Numbers"
-                    android:textSize="24sp"
+                    android:textSize="22sp"
                     android:textColor="@color/black"
                     android:layout_marginBottom="10dp"
                     android:layout_marginTop="12dp"
                     android:layout_weight="1"
+                    android:background="@color/headbar"
                     />
                 <EditText
                     android:id="@+id/n1"
@@ -137,7 +139,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="15dp"
-                    android:backgroundTint="@color/colorPrimaryDark"
+                    android:backgroundTint="@color/headbar"
+                    android:textColor="@color/black"
                     android:text="SIGN UP"
                     android:textSize="32sp"
                     android:layout_weight="1"

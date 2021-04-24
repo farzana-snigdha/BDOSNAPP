@@ -9,6 +9,8 @@
     android:padding="15dp"
     android:weightSum="10"
     app:layout_constraintTop_toTopOf="parent"
+    android:textColor="@color/bg"
+
     tools:context=".Profile">
 
 <!--    <TextView-->
@@ -89,6 +91,7 @@
         android:background="@color/colorPrimary"
         android:padding="12dp"
         android:text="Your Emergency Numbers"
+        android:textStyle="bold"
         android:textColor="@color/black"
         android:textSize="24sp" />
 

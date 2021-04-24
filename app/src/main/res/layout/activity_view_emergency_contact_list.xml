@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:padding="20dp"
     tools:context=".ViewEmergencyContactList"
+    android:background="@color/bg"
 
     >
 
@@ -15,6 +16,7 @@
         android:layout_height="0dp"
         android:layout_margin="15dp"
         android:gravity="center"
+        android:textColor="@color/white"
         android:text="My Location"
         android:textAlignment="center"
         android:textSize="25dp"
@@ -24,6 +26,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:textColor="@color/colorAccent"
         android:id="@+id/textView2"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -31,6 +34,7 @@
         android:paddingLeft="10dp"
         android:text="@string/friends"
         android:textSize="35dp"
+        android:gravity="center"
         app:layout_constraintBottom_toTopOf="@+id/textViewEm1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -39,6 +43,7 @@
     <TextView
         android:id="@+id/textViewEm1"
         android:layout_width="0dp"
+        android:textColor="@color/white"
         android:layout_height="0dp"
         android:layout_margin="15dp"
         android:gravity="center"
@@ -57,6 +62,7 @@
         android:layout_margin="15dp"
         android:gravity="center"
         android:text="@string/emergency_contact"
+        android:textColor="@color/white"
         android:textAlignment="center"
         android:textSize="25dp"
         app:layout_constraintBottom_toTopOf="@+id/textViewEm3"
@@ -66,6 +72,7 @@
 
     <TextView
         android:id="@+id/textViewEm3"
+        android:textColor="@color/white"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="15dp"
@@ -85,6 +92,8 @@
         android:layout_marginTop="25dp"
         android:layout_marginBottom="150dp"
         android:text="@string/my_text"
+        android:textColor="@color/colorAccent"
+        android:textStyle="bold"
         android:textAllCaps="true"
         android:textSize="25dp"
         app:layout_constraintBottom_toBottomOf="parent"
