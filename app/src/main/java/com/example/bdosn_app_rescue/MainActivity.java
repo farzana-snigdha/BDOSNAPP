@@ -266,6 +266,47 @@ public class MainActivity extends AppCompatActivity {
                         insertDataIntoDatabase(addresses.get(0).getLatitude(), addresses.get(0).getLongitude());
                         Log.d("xdcfvgbhjn", addresses.get(0).getLatitude() + "," + addresses.get(0).getLongitude());
 
+                        String username = getIntent().getStringExtra("username");
+                        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
+                        Query checkUser = reference.orderByChild("email").equalTo(username);
+                        // ds1.child("email").getValue(String.class).equals(user.getEmail())
+                        // reference = FirebaseDatabase.getInstance().getReference().child("Users");
+                        checkUser.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if(snapshot.exists()) {
+                                    String eContact1FromDB = snapshot.child(username).child("em1").getValue(String.class);
+                                    String phoneNumber = "88" + eContact1FromDB;
+                                    String eContact2FromDB = snapshot.child(username).child("em2").getValue(String.class);
+                                    String phoneNumber2 = "88" + eContact2FromDB;
+                                    String eContact3FromDB = snapshot.child(username).child("em3").getValue(String.class);
+                                    String phoneNumber3 = "88" + eContact3FromDB;
+
+                                    String dangerMessage = "**User is in DANGER**\n";
+                                    String link = "\nLink = https://www.google.com/maps/search/?api=1&query=" +addresses.get(0).getLatitude() +
+                                            "," + addresses.get(0).getLongitude();
+                                    String message = dangerMessage + "Address = " + addresses.get(0).getAddressLine(0) +
+                                            "\nLocality = " + addresses.get(0).getLocality() +
+                                            "\nCountry = " + addresses.get(0).getCountryName() +
+                                            "\nLatitude = " + addresses.get(0).getLatitude() +
+                                            "\nLongitude = " + addresses.get(0).getLongitude() + link;
+                                    SmsManager smsManager = SmsManager.getDefault();
+                                    smsManager.sendTextMessage(phoneNumber, null, message, null, null);
+                                    SmsManager smsManager2 = SmsManager.getDefault();
+                                    smsManager2.sendTextMessage(phoneNumber2, null, message, null, null);
+                                    SmsManager smsManager3 = SmsManager.getDefault();
+                                    smsManager3.sendTextMessage(phoneNumber3, null, message, null, null);
+                                }
+                                else {
+
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
 
                     } catch (IOException e) {
                         e.printStackTrace();
