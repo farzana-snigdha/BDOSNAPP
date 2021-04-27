@@ -73,147 +73,150 @@ public class ViewEmergencyContactList extends AppCompatActivity {
         });
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
-        reference = FirebaseDatabase.getInstance().getReference().child("Users");
-        userID = user.getEmail();
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        if(user==null){
+            Toast.makeText(getApplicationContext(),"Create account first",Toast.LENGTH_SHORT).show();
+        }
+        else {
+            reference = FirebaseDatabase.getInstance().getReference().child("Users");
+            userID = user.getEmail();
+            fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot st) {
-                if (st.exists()) {
-                    Log.d("dfghjbhb1", String.valueOf(user.getEmail()));
-                    for (DataSnapshot ds1 : st.getChildren()) {
-                        if (ds1.child("email").getValue(String.class).equals(userID)) {
-                            ownId = ds1.child("userId").getValue(String.class);
-                            loc.setText(ds1.child("name").getValue(String.class));
-                            loc.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    if (isLocationEnabled(getApplicationContext())) {
-                                        getLocation();
-                                        Intent i = new Intent(getApplicationContext(), MapsActivity.class);
-                                        i.putExtra("name", ds1.child("name").getValue(String.class));
-                                        i.putExtra("email", ds1.child("email").getValue(String.class));
-                                        i.putExtra("userId", ds1.child("userId").getValue(String.class));
-                                        startActivity(i);
-                                        Log.d("kjikhi", "ji");
+            reference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot st) {
+                    if (st.exists()) {
+                        Log.d("dfghjbhb1", String.valueOf(user.getEmail()));
+                        for (DataSnapshot ds1 : st.getChildren()) {
+                            if (ds1.child("email").getValue(String.class).equals(userID)) {
+                                ownId = ds1.child("userId").getValue(String.class);
+                                loc.setText(ds1.child("name").getValue(String.class));
+                                loc.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        if (isLocationEnabled(getApplicationContext())) {
+                                            getLocation();
+                                            Intent i = new Intent(getApplicationContext(), MapsActivity.class);
+                                            i.putExtra("name", ds1.child("name").getValue(String.class));
+                                            i.putExtra("email", ds1.child("email").getValue(String.class));
+                                            i.putExtra("userId", ds1.child("userId").getValue(String.class));
+                                            startActivity(i);
+                                            Log.d("kjikhi", "ji");
 
-                                    } else {
-                                        AlertDialog.Builder builder
-                                                = new AlertDialog
-                                                .Builder(ViewEmergencyContactList.this);
+                                        } else {
+                                            AlertDialog.Builder builder
+                                                    = new AlertDialog
+                                                    .Builder(ViewEmergencyContactList.this);
 
-                                        builder.setMessage("Turn On Your Location");
+                                            builder.setMessage("Turn On Your Location");
 
-                                        builder.setTitle("Location Alert !");
+                                            builder.setTitle("Location Alert !");
 
-                                        builder.setCancelable(false);
-                                        builder.setNegativeButton(
-                                                "OK",
-                                                new DialogInterface
-                                                        .OnClickListener() {
+                                            builder.setCancelable(false);
+                                            builder.setNegativeButton(
+                                                    "OK",
+                                                    new DialogInterface
+                                                            .OnClickListener() {
 
-                                                    @Override
-                                                    public void onClick(DialogInterface dialog,
-                                                                        int which) {
-                                                        dialog.cancel();
-                                                    }
-                                                });
+                                                        @Override
+                                                        public void onClick(DialogInterface dialog,
+                                                                            int which) {
+                                                            dialog.cancel();
+                                                        }
+                                                    });
 
-                                        // Create the Alert dialog
-                                        AlertDialog alertDialog = builder.create();
+                                            // Create the Alert dialog
+                                            AlertDialog alertDialog = builder.create();
 
-                                        // Show the Alert Dialog box
-                                        alertDialog.show();
+                                            // Show the Alert Dialog box
+                                            alertDialog.show();
 
-                                        Log.d("xnsxn", "xnjwbnx")
+                                            Log.d("xnsxn", "xnjwbnx")
 
-                                        ;
+                                            ;
+                                        }
+
                                     }
+                                });
+                            }
+                        }
+                        for (DataSnapshot ds : st.getChildren()) {
+
+
+                            circleRef = FirebaseDatabase.getInstance().getReference().child("Users").child(ownId).child("CircleMembers");
+                            circleRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    if (snapshot.exists()) {
+                                        maxid = snapshot.getChildrenCount();
+                                    }
+                                    int k = 0;
+                                    for (int i = 1; i <= maxid; i++) {
+                                        arr.set(k, snapshot.child(String.valueOf(i)).getValue(String.class));
+                                        k = k + 1;
+                                    }
+                                    e1.setText(st.child(arr.get(0)).child("name").getValue(String.class));
+                                    e2.setText(st.child(arr.get(1)).child("name").getValue(String.class));
+                                    e3.setText(st.child(arr.get(2)).child("name").getValue(String.class));
+                                    e1.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            if (st.child(arr.get(0)).hasChild("Latitude")) {
+                                                Intent i = new Intent(getApplicationContext(), MapsActivity.class);
+                                                i.putExtra("name", st.child(arr.get(0)).child("name").getValue(String.class));
+                                                i.putExtra("email", st.child(arr.get(0)).child("email").getValue(String.class));
+                                                i.putExtra("userId", st.child(arr.get(0)).child("userId").getValue(String.class));
+                                                startActivity(i);
+                                            } else {
+                                                Toast.makeText(getApplicationContext(), "Location isn't shared with you", Toast.LENGTH_SHORT).show();
+                                            }
+
+                                        }
+                                    });
+                                    e2.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            Intent i = new Intent(getApplicationContext(), MapsActivity.class);
+                                            i.putExtra("name", st.child(arr.get(1)).child("name").getValue(String.class));
+                                            i.putExtra("email", st.child(arr.get(1)).child("email").getValue(String.class));
+                                            i.putExtra("userId", st.child(arr.get(1)).child("userId").getValue(String.class));
+                                            startActivity(i);
+                                        }
+                                    });
+                                    e3.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            Intent i = new Intent(getApplicationContext(), MapsActivity.class);
+                                            i.putExtra("name", st.child(arr.get(2)).child("name").getValue(String.class));
+                                            i.putExtra("email", st.child(arr.get(2)).child("email").getValue(String.class));
+                                            i.putExtra("userId", st.child(arr.get(2)).child("userId").getValue(String.class));
+                                            startActivity(i);
+                                        }
+                                    });
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
 
                                 }
                             });
+
+                            //    Log.d("dfghjbhb111", ownId + "     " + joinUserId + "      " + maxid[0]);
+
+
                         }
-                    }
-                    for (DataSnapshot ds : st.getChildren()) {
-
-
-                        circleRef = FirebaseDatabase.getInstance().getReference().child("Users").child(ownId).child("CircleMembers");
-                        circleRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                if (snapshot.exists()) {
-                                    maxid = snapshot.getChildrenCount();
-                                }
-                                int k = 0;
-                                for (int i = 1; i <= maxid; i++) {
-                                    arr.set(k, snapshot.child(String.valueOf(i)).getValue(String.class));
-                                    k = k + 1;
-                                }
-                                e1.setText(st.child(arr.get(0)).child("name").getValue(String.class));
-                                e2.setText(st.child(arr.get(1)).child("name").getValue(String.class));
-                                e3.setText(st.child(arr.get(2)).child("name").getValue(String.class));
-                                e1.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        if (st.child(arr.get(0)).hasChild("Latitude")){
-                                            Intent i = new Intent(getApplicationContext(), MapsActivity.class);
-                                            i.putExtra("name", st.child(arr.get(0)).child("name").getValue(String.class));
-                                            i.putExtra("email", st.child(arr.get(0)).child("email").getValue(String.class));
-                                            i.putExtra("userId", st.child(arr.get(0)).child("userId").getValue(String.class));
-                                            startActivity(i);
-                                        }
-                                        else {
-                                            Toast.makeText(getApplicationContext(),"Location isn't shared with you",Toast.LENGTH_SHORT).show();
-                                        }
-
-                                    }
-                                });
-                                e2.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        Intent i = new Intent(getApplicationContext(), MapsActivity.class);
-                                        i.putExtra("name", st.child(arr.get(1)).child("name").getValue(String.class));
-                                        i.putExtra("email", st.child(arr.get(1)).child("email").getValue(String.class));
-                                        i.putExtra("userId", st.child(arr.get(1)).child("userId").getValue(String.class));
-                                        startActivity(i);
-                                    }
-                                });
-                                e3.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        Intent i = new Intent(getApplicationContext(), MapsActivity.class);
-                                        i.putExtra("name", st.child(arr.get(2)).child("name").getValue(String.class));
-                                        i.putExtra("email", st.child(arr.get(2)).child("email").getValue(String.class));
-                                        i.putExtra("userId", st.child(arr.get(2)).child("userId").getValue(String.class));
-                                        startActivity(i);
-                                    }
-                                });
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-
-                            }
-                        });
-
-                        //    Log.d("dfghjbhb111", ownId + "     " + joinUserId + "      " + maxid[0]);
 
 
                     }
-
 
                 }
 
-            }
 
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
+                }
+            });
+        }
 
     }
     public static boolean isLocationEnabled(Context context) {

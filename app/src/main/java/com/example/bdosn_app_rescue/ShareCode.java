@@ -90,7 +90,7 @@ FirebaseAuth auth;
 
                             ownId = ds1.child("userId").getValue(String.class);
                             ref = FirebaseDatabase.getInstance().getReference().child("Users").child(ownId);
-                            ref.addValueEventListener(new ValueEventListener() {
+                            ref.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                                     String num1 = "88"+snapshot.child("em1").getValue(String.class);

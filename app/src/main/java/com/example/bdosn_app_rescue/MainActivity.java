@@ -65,8 +65,8 @@ public class MainActivity extends AppCompatActivity {
     FirebaseUser user;
     PermissionManager manager;
     FusedLocationProviderClient fusedLocationProviderClient;
-    DatabaseReference reference, circleRef,ref;
-    String ownId,ownId1;
+    DatabaseReference reference, circleRef, ref;
+    String ownId, ownId1;
     private static final int REQUEST_CALL = 1;
     Button EmBtn;
     Button Emn1;
@@ -108,43 +108,45 @@ public class MainActivity extends AppCompatActivity {
         EmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (isLocationEnabled(getApplicationContext()))
-                {
-                    getLocation();
-                    Log.d("kjikhi", "ji");
+                if (user == null) {
+                    Toast.makeText(getApplicationContext(), "Create account first", Toast.LENGTH_SHORT).show();
+                } else {
+                    if (isLocationEnabled(getApplicationContext())) {
+                        getLocation();
+                        Log.d("kjikhi", "ji");
 
-                }
-                else {
-                    AlertDialog.Builder builder
-                            = new AlertDialog
-                            .Builder(MainActivity.this);
+                    } else {
+                        AlertDialog.Builder builder
+                                = new AlertDialog
+                                .Builder(MainActivity.this);
 
-                    builder.setMessage("Turn On Your Location");
+                        builder.setMessage("Turn On Your Location");
 
-                    builder.setTitle("Location Alert !");
+                        builder.setTitle("Location Alert !");
 
-                    builder.setCancelable(false);
-                    builder.setNegativeButton(
-                            "OK",
-                            new DialogInterface
-                                    .OnClickListener() {
+                        builder.setCancelable(false);
+                        builder.setNegativeButton(
+                                "OK",
+                                new DialogInterface
+                                        .OnClickListener() {
 
-                                @Override
-                                public void onClick(DialogInterface dialog,
-                                                    int which) {
-                                    dialog.cancel();
-                                }
-                            });
+                                    @Override
+                                    public void onClick(DialogInterface dialog,
+                                                        int which) {
+                                        dialog.cancel();
+                                    }
+                                });
 
-                    // Create the Alert dialog
-                    AlertDialog alertDialog = builder.create();
+                        // Create the Alert dialog
+                        AlertDialog alertDialog = builder.create();
 
-                    // Show the Alert Dialog box
-                    alertDialog.show();
+                        // Show the Alert Dialog box
+                        alertDialog.show();
 
-                    Log.d("xnsxn", "xnjwbnx")
+                        Log.d("xnsxn", "xnjwbnx")
 
-                    ;
+                        ;
+                    }
                 }
             }
         });
@@ -238,7 +240,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog,
                                         int which) {
-                  dialog.cancel();
+                        dialog.cancel();
                     }
                 });
 
@@ -289,22 +291,22 @@ public class MainActivity extends AppCompatActivity {
 
                             ownId = ds1.child("userId").getValue(String.class);
                             ref = FirebaseDatabase.getInstance().getReference().child("Users").child(ownId);
-                            ref.addValueEventListener(new ValueEventListener() {
+                            ref.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    String num1 = "88"+snapshot.child("em1").getValue(String.class);
-                                    String num2 = "88"+snapshot.child("em2").getValue(String.class);
-                                    String num3 = "88"+snapshot.child("em3").getValue(String.class);
-                                    String name=snapshot.child("name").getValue(String.class);
-                                    String message=name+" is in danger.";
+                                    String num1 = "88" + snapshot.child("em1").getValue(String.class);
+                                    String num2 = "88" + snapshot.child("em2").getValue(String.class);
+                                    String num3 = "88" + snapshot.child("em3").getValue(String.class);
+                                    String name = snapshot.child("name").getValue(String.class);
+                                    String message = name + " is in danger.";
 
                                     SmsManager smsManager = SmsManager.getDefault();
-                    smsManager.sendTextMessage(num1, null, message, null, null);
-                    SmsManager smsManager2 = SmsManager.getDefault();
-                    smsManager2.sendTextMessage(num2, null, message, null, null);
-                    SmsManager smsManager3 = SmsManager.getDefault();
-                    smsManager3.sendTextMessage(num3, null, message, null, null);
-                                    Log.d("sqx",num1);
+                                    smsManager.sendTextMessage(num1, null, message, null, null);
+                                    SmsManager smsManager2 = SmsManager.getDefault();
+                                    smsManager2.sendTextMessage(num2, null, message, null, null);
+                                    SmsManager smsManager3 = SmsManager.getDefault();
+                                    smsManager3.sendTextMessage(num3, null, message, null, null);
+                                    Log.d("sqx", num1);
                                 }
 
                                 @Override
@@ -323,7 +325,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
 
 
 //        Query checkUser = reference.orderByChild("email").equalTo(username);
